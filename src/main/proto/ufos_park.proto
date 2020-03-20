@@ -1,0 +1,43 @@
+/**
+ * instalar extension vscode-proto3
+ */
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.elsmancs.grpc"; // dara problemas
+option java_outer_classname = "UfosParkProto";
+option objc_class_prefix = "UFP";
+
+package ricksy.business;
+
+// Interfaz exportada por el servidor
+
+service UfosPark {
+    // Un RPC simple.
+    //
+    // Asigna un UFO a una tarjeta de credito dada.
+    //
+    // Devuelve un UFO con un nombre vacio si alguna 
+    // de las condiciones de reserva fallan.
+
+    rpc Dispatch (CreditCard) returns (Ufo) {}
+  
+  }
+  
+  // Tarjeta de crédito
+  message CreditCard {
+    // propietario de la tarjeta
+    string owner = 1;
+    // numero de la tarjeta
+    string number = 2;
+  }
+  
+  // Ufo reservado para esa tarjeta de crédito
+  message Ufo {  
+    // id del UFO
+    string id = 1;
+    // Pendiente:
+    // CreditCard lo = 2;
+    string cardNumber = 2;
+  }

@@ -1,15 +1,61 @@
 
 plugins {
-    id 'java'
+    // id 'java'
     id 'application'
+    // For protobuf-based codegen integrated with the Gradle build
+    // system, you can use protobuf-gradle-plugin
+    id 'com.google.protobuf' version '0.8.8'
 }
 
 repositories {
+    maven { // The google mirror is less flaky than mavenCentral()
+            url "https://maven-central.storage-download.googleapis.com/repos/central/data/" }
+    mavenCentral()
     mavenLocal()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// safely updating the version
+def grpcVersion = '1.28.0' // CURRENT_GRPC_VERSION
+def protobufVersion = '3.11.0'
+def protocVersion = protobufVersion
+
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    // JARS for Gradle with non-Android
+    // gRPC-Java - An RPC library and framework
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    compileOnly "javax.annotation:javax.annotation-api:1.2"
+    // examples/advanced need this for JsonFormat; yo no lo necesito ¿?
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+
+    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
+    testImplementation "junit:junit:4.12"
+    //compile 'com.google.protobuf:protobuf-java:3.10.0'
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+// Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
 }
 
 application {
