@@ -58,6 +58,32 @@ sourceSets {
     }
 }
 
-application {
-    mainClassName = 'ricksy.business.RicksyBusiness'
+// application {
+//    mainClassName = 'ricksy.business.RicksyBusiness'
+//}
+
+// Si comento applicarion mainClassName:
+// A problem was found with the configuration of task ':startScripts' (type 'CreateStartScripts').
+// No value has been specified for property 'mainClassName'.
+
+startScripts.enabled = false
+
+task UfosParkServer(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.UfosParkServer'
+    applicationName = 'ufos-park-server'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+task UfosParkClient(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.UfosParkClient'
+    applicationName = 'ufos-park-client'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+applicationDistribution.into('bin') {
+    from(UfosParkServer)
+    from(UfosParkClient)
+    fileMode = 0755
 }
