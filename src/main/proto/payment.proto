@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "ufos_park.proto";
+
+option java_multiple_files = true;
+option java_package = "org.elsmancs.grpc";
+option java_outer_classname = "PaymentProto";
+option objc_class_prefix = "PAY";
+ 
+// Interfaz exportada por el servidor
+ 
+service Payment {
+    // Un RPC simple.
+    // Procesa un cargo a la tarjeta de credito dada.
+    // Devuelve boolean indicando si se ha procesado el pago.
+ 
+    rpc Dispatch (ufos.park.CreditCard) returns (Processed) {}
+   
+}
+   
+// Tarjeta de crédito importada de ufos_park.proto
+   
+// Ufo reservado para esa tarjeta de crédito
+message Processed {  
+    // Si hay credito disponible se procesa
+    bool isProcessed = 1;
+}
+ 

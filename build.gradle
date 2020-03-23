@@ -82,8 +82,32 @@ task UfosParkClient(type: CreateStartScripts) {
     classpath = startScripts.classpath
 }
 
+task Dispatcher(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.Dispatcher'
+    applicationName = 'guest-dispatcher'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+task PaymentServer(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.PaymentServer'
+    applicationName = 'payment-server'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+task PaymentClient(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.PaymentClient'
+    applicationName = 'payment-client'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
 applicationDistribution.into('bin') {
     from(UfosParkServer)
     from(UfosParkClient)
+    from(PaymentServer)
+    from(PaymentClient)
+    from(Dispatcher)
     fileMode = 0755
 }

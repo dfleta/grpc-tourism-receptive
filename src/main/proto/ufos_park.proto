@@ -9,7 +9,12 @@ option java_package = "org.elsmancs.grpc"; // dara problemas
 option java_outer_classname = "UfosParkProto";
 option objc_class_prefix = "UFP";
 
-package ricksy.business;
+/* 
+  You can add an optional package specifier to a .proto file 
+  to prevent name clashes between protocol message types.
+  Sirve para importar estos mensajes a otros ficheros proto.
+  */
+package ufos.park;
 
 // Interfaz exportada por el servidor
 
@@ -25,19 +30,19 @@ service UfosPark {
   
   }
   
-  // Tarjeta de crédito
-  message CreditCard {
+// Tarjeta de crédito
+message CreditCard {
     // propietario de la tarjeta
     string owner = 1;
     // numero de la tarjeta
     string number = 2;
-  }
+}
   
-  // Ufo reservado para esa tarjeta de crédito
-  message Ufo {  
+// Ufo reservado para esa tarjeta de crédito
+message Ufo {  
     // id del UFO
     string id = 1;
     // Pendiente:
     // CreditCard lo = 2;
     string cardNumber = 2;
-  }
+}
