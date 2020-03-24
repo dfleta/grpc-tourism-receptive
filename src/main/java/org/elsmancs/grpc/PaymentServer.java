@@ -80,7 +80,7 @@ public class PaymentServer {
   static class PaymentService extends PaymentGrpc.PaymentImplBase {
 
     @Override
-    public void dispatch(CreditCard request, 
+    public void pay(CreditCard request, 
                          StreamObserver<org.elsmancs.grpc.Processed > responseObserver) {
       // Como construir un mensaje con varias propiedades:
       // method chaining

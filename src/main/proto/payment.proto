@@ -14,7 +14,7 @@ service Payment {
     // Procesa un cargo a la tarjeta de credito dada.
     // Devuelve boolean indicando si se ha procesado el pago.
  
-    rpc Dispatch (ufos.park.CreditCard) returns (Processed) {}
+    rpc Pay (ufos.park.CreditCard) returns (Processed) {}
    
 }
    

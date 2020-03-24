@@ -39,7 +39,7 @@ public class PaymentClient {
   // Obtener un UFO para la tarjeta
   // Nombro el metodo en mayuscula porque en el
   // fichero proto esta en mayuscula
-  public void Dispatch(String owner, String cardNumber) {
+  public void Pay(String owner, String cardNumber) {
       
     logger.info("Intentaré procesar el pago para " + owner + " " + cardNumber + " ...");
 
@@ -49,7 +49,7 @@ public class PaymentClient {
                                     .build();
     Processed response;
     try {
-        response = blockingStub.dispatch(request);
+        response = blockingStub.pay(request);
     } catch (StatusRuntimeException e) {
         logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
         return;
@@ -95,7 +95,7 @@ public class PaymentClient {
 
     try {
       PaymentClient client = new PaymentClient(channel);
-      client.Dispatch(user, card);
+      client.Pay(user, card);
     } finally {
       // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
       // resources the channel should be shut down when it will no longer be used. If it may be used
