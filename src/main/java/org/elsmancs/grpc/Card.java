@@ -25,7 +25,7 @@ class Card {
         return this.number;
     }
 
-    String cardOwner() {
+    String owner() {
         return this.owner;
     }
 
