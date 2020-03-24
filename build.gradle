@@ -103,11 +103,19 @@ task PaymentClient(type: CreateStartScripts) {
     classpath = startScripts.classpath
 }
 
+task App(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.App'
+    applicationName = 'app'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
 applicationDistribution.into('bin') {
     from(UfosParkServer)
     from(UfosParkClient)
     from(PaymentServer)
     from(PaymentClient)
     from(Dispatcher)
+    from(App)
     fileMode = 0755
 }

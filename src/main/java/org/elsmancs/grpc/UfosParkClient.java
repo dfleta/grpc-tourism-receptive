@@ -39,7 +39,7 @@ public class UfosParkClient {
   // Obtener un UFO para la tarjeta
   // Nombro el metodo en mayuscula porque en el
   // fichero proto esta en mayuscula
-  public void Dispatch(String owner, String cardNumber) {
+  public Ufo Dispatch(String owner, String cardNumber) {
       
     logger.info("Intentaré reservar un UFO para " + owner + " ...");
 
@@ -52,9 +52,10 @@ public class UfosParkClient {
         response = blockingStub.dispatch(request);
     } catch (StatusRuntimeException e) {
         logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-        return;
+        return null;
     }
     logger.info("Ufo reservado para "+ response.getCardNumber() + ": " + response.getId());
+    return response;
 }
 
 
