@@ -100,13 +100,13 @@ public class UfosParkServer {
 
     @Override
     public void assignUfo(Ufo request, 
-                         StreamObserver<org.elsmancs.grpc.Confirmed> responseObserver) {
+                         StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
 
         boolean isAssigned = ufosParkADT.assignUfo(request);
         // Como construir un mensaje con varias propiedades:
         // method chaining
-        Confirmed reply = Confirmed.newBuilder()
-                                    .setIsUfoAssigned(isAssigned)
+        Processed reply = Processed.newBuilder()
+                                    .setIsProcessed(isAssigned)
                                     .build();
         // return the Ufo
         responseObserver.onNext(reply);

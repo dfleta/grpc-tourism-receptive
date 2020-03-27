@@ -171,15 +171,15 @@ public class UfosParkClient {
                             .setCardNumber(cardNumber)
                             .build();
 
-        Confirmed response;
+        Processed response;
         try {
             response = blockingStub.assignUfo(request);
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return false;
         }
-        logger.info("Ufo confirmado " + response.getIsUfoAssigned());
-        return response.getIsUfoAssigned();
+        logger.info("Ufo confirmado " + response.getIsProcessed());
+        return response.getIsProcessed();
     }
 
     void shutDownChannel() throws Exception {

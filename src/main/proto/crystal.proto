@@ -1,0 +1,41 @@
+/**
+ * instalar extension vscode-proto3
+ */
+
+syntax = "proto3";
+
+import "payment.proto";
+
+option java_multiple_files = true;
+option java_package = "org.elsmancs.grpc"; // dara problemas
+option java_outer_classname = "CrystalExpenderProto";
+option objc_class_prefix = "KRP";
+ 
+/* 
+   You can add an optional package specifier to a .proto file 
+   to prevent name clashes between protocol message types.
+   Sirve para importar estos mensajes a otros ficheros proto.
+   */
+package crystal.expender;
+ 
+// Interfaz exportada por el servidor
+ 
+service CrystalExpender {
+    // Un RPC simple.
+    //
+    // Asigna unidades de crystal de Collaxion 
+    // a una tarjeta de credito dada.
+    //
+    // Devuelve 0 si alguna 
+    // de las condiciones de reserva fallan.
+ 
+    rpc Dispatch (payment.CreditCard) returns (Crystal) {}
+    rpc Confirm (Crystal) returns (payment.Processed) {}  
+}
+   
+ 
+// Unidades de crystal reservadas para esa tarjeta de crédito
+message Crystal {  
+    // unidades de crystal
+    string unidades = 1;
+}

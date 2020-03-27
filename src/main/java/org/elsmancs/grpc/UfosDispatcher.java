@@ -11,9 +11,6 @@ class UfosDispatcher implements GuestDispatcher {
 
     @Override
     public void dispatch(CreditCard card) throws Exception {
-       
-        // comprobar pago autorizado
-        // ejecutar llamada al server desde el cliente
         
         // Abrimos canal con el server
         UfosParkClient ufosClient = UfosParkClient.init();

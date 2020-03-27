@@ -4,6 +4,8 @@
 
 syntax = "proto3";
 
+import "payment.proto";
+
 option java_multiple_files = true;
 option java_package = "org.elsmancs.grpc"; // dara problemas
 option java_outer_classname = "UfosParkProto";
@@ -26,18 +28,12 @@ service UfosPark {
     // Devuelve un UFO con un nombre vacio si alguna 
     // de las condiciones de reserva fallan.
 
-    rpc Dispatch (CreditCard) returns (Ufo) {}
-    rpc AssignUfo (Ufo) returns (Confirmed) {}  
-  }
-  
-// Tarjeta de crédito
-message CreditCard {
-    // propietario de la tarjeta
-    string owner = 1;
-    // numero de la tarjeta
-    string number = 2;
+    rpc Dispatch (payment.CreditCard) returns (Ufo) {}
+    rpc AssignUfo (Ufo) returns (payment.Processed) {}  
 }
   
+// Tarjeta de crédito importada de ufos_park.proto
+
 // Ufo reservado para esa tarjeta de crédito
 message Ufo {  
     // id del UFO
@@ -47,7 +43,8 @@ message Ufo {
     string cardNumber = 2;
 }
 
+/*
 message Confirmed {  
   // Asigna el UFO indicado a la Card indicada
   bool isUfoAssigned = 1;
-}
+}*/
