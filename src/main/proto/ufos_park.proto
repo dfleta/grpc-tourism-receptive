@@ -27,7 +27,7 @@ service UfosPark {
     // de las condiciones de reserva fallan.
 
     rpc Dispatch (CreditCard) returns (Ufo) {}
-  
+    rpc AssignUfo (Ufo) returns (Confirmed) {}  
   }
   
 // Tarjeta de crédito
@@ -45,4 +45,9 @@ message Ufo {
     // Pendiente:
     // CreditCard lo = 2;
     string cardNumber = 2;
+}
+
+message Confirmed {  
+  // Asigna el UFO indicado a la Card indicada
+  bool isUfoAssigned = 1;
 }
