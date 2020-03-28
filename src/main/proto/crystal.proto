@@ -37,5 +37,6 @@ service CrystalExpender {
 // Unidades de crystal reservadas para esa tarjeta de crédito
 message Crystal {  
     // unidades de crystal
-    string unidades = 1;
+    // CAMBIAR A INT
+    int32 unidades = 1;
 }

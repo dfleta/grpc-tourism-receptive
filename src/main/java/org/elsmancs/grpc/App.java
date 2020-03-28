@@ -7,6 +7,7 @@ public class App {
         Receptivo receptivo = new Receptivo();
 
         receptivo.registra(new UfosDispatcher());
+        receptivo.registra(new CrystalDispatcher());
 
         CreditCard card = null;
         // owner y cardNumber como argumentos en línea de comandos

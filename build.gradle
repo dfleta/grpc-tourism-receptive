@@ -103,6 +103,20 @@ task PaymentClient(type: CreateStartScripts) {
     classpath = startScripts.classpath
 }
 
+task CrystalServer(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.CrystalServer'
+    applicationName = 'crystal-expender-server'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+task CrystalClient(type: CreateStartScripts) {
+    mainClassName = 'org.elsmancs.grpc.CrystalClient'
+    applicationName = 'crystal-expender-client'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
 task App(type: CreateStartScripts) {
     mainClassName = 'org.elsmancs.grpc.App'
     applicationName = 'app'
@@ -115,6 +129,8 @@ applicationDistribution.into('bin') {
     from(UfosParkClient)
     from(PaymentServer)
     from(PaymentClient)
+    from(CrystalServer)
+    from(CrystalClient)
     from(Dispatcher)
     from(App)
     fileMode = 0755
