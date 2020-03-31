@@ -2,6 +2,6 @@ package org.elsmancs.grpc;
 
 interface GuestDispatcher {
 
-    void dispatch(CreditCard card) throws Exception;
+    void dispatch(String cardOwner, String cardNumber) throws Exception;
 
 }

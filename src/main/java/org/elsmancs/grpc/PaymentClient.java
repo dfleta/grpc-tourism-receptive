@@ -104,7 +104,7 @@ public class PaymentClient {
         }
     }
 
-    public static boolean execute(CreditCard card, double charge) throws Exception {
+    public static boolean execute(String cardOwner, String cardNumber, double charge) throws Exception {
         
         String target = "localhost:50061";
         // Allow passing in the user and target strings as command line arguments        
@@ -120,7 +120,7 @@ public class PaymentClient {
 
         try {
             PaymentClient client = new PaymentClient(channel);
-            return client.Pay(card.getOwner(), card.getOwner(), charge);
+            return client.Pay(cardOwner, cardNumber, charge);
         } finally {
             // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
             // resources the channel should be shut down when it will no longer be used. If it may be used

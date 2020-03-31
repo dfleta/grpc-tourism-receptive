@@ -14,9 +14,9 @@ class Receptivo {
         observers.add(observer);
     }
 
-    void dispatch(CreditCard card) throws Exception {
+    void dispatch(String cardOwner, String cardNumber) throws Exception {
         for (GuestDispatcher observer: observers) {
-                observer.dispatch(card);       
+                observer.dispatch(cardOwner, cardNumber);       
         }
     }
 }
