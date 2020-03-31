@@ -90,6 +90,7 @@ public class CrystalServer {
       // method chaining
       Crystal reply = Crystal.newBuilder()
                               .setUnidades(unidades)
+                              .setFee(crystalExpender.fee())
                               .build();
       // return Collaxion units
       responseObserver.onNext(reply);

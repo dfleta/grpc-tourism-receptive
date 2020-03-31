@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A simple client that requests a UFO from the {@link UfosParkServer}.
+ * A simple client that requests Collaxion crytal from the {@link CrystalServer}.
  */
 public class CrystalClient {
 
@@ -22,12 +22,12 @@ public class CrystalClient {
 
     private final CrystalExpenderGrpc.CrystalExpenderBlockingStub blockingStub;
 
-    // OCP
+    // SRP + OCP
     private ManagedChannel channel = null;
 
 
     /**
-     * Construct client for accessing UfosParkServer using the existing channel.
+     * Construct client for accessing CrystalServer using the existing channel.
      */
     public CrystalClient(Channel channel) {
 
@@ -40,7 +40,7 @@ public class CrystalClient {
         blockingStub = CrystalExpenderGrpc.newBlockingStub(channel);
     }
 
-    // Obtener un UFO para la tarjeta
+    // Obtener crytal para la tarjeta
     // Nombro el metodo en mayuscula porque en el
     // fichero proto esta en mayuscula
     public Crystal Dispatch(String owner, String cardNumber) {
@@ -63,13 +63,12 @@ public class CrystalClient {
     }
 
     /**
-     * Greet server. If provided, the first element of {@code args} is the name to
-     * use in the greeting. The second argument is the target server.
+     * Main method to run the client as standalone app.
      */
     public static void main(String[] args) throws Exception {
         String user = "Rick";
         String card = "123456789";
-        // Access a service running on the local machine on port 50051
+        // Access a service running on the local machine on port 50071
         String target = "localhost:50071";
         // Allow passing in the user and target strings as command line arguments
         if (args.length > 0) {
@@ -136,7 +135,7 @@ public class CrystalClient {
     // Confirmar el crystal para la tarjeta
     public boolean Confirm(Crystal crystal) {
 
-        logger.info("Intentare confirmar " + crystal.getUnidades() + " unidades de crystal" + " ...");
+        logger.info("Intentando confirmar " + crystal.getUnidades() + " unidades de crystal" + " ...");
 
         Crystal request = Crystal.newBuilder()
                             .setUnidades(crystal.getUnidades())

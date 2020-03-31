@@ -79,13 +79,20 @@ public class PaymentServer {
    */
   static class PaymentService extends PaymentGrpc.PaymentImplBase {
 
+    private CardPool cardsPool = new CardPool();
+
     @Override
-    public void pay(CreditCard request, 
-                         StreamObserver<org.elsmancs.grpc.Processed > responseObserver) {
+    public void pay(CreditCard request,
+                    StreamObserver<org.elsmancs.grpc.Processed > responseObserver) {
+
+      cardsPool.add(request);
+
+      boolean isAuthorised = (cardsPool.pay(request))? true: false; 
+
       // Como construir un mensaje con varias propiedades:
       // method chaining
       Processed reply = Processed.newBuilder()
-                        .setIsProcessed(true)
+                        .setIsProcessed(isAuthorised)
                         .build();
       // return the Ufo
       responseObserver.onNext(reply);

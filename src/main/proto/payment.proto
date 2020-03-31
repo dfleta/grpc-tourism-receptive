@@ -24,6 +24,7 @@ message CreditCard {
     string owner = 1;
     // numero de la tarjeta
     string number = 2;
+    double charge = 3;
 }
    
 // Pago autorizado

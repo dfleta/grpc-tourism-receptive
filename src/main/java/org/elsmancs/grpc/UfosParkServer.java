@@ -79,18 +79,19 @@ public class UfosParkServer {
    */
   static class UfosParkService extends UfosParkGrpc.UfosParkImplBase {
     
-    private UfosPark ufosParkADT = new UfosPark(); 
+    private UfosPark ufosPark = new UfosPark(); 
 
     @Override
     public void dispatch(CreditCard request, 
                          StreamObserver<org.elsmancs.grpc.Ufo> responseObserver) {
 
-      String ufoID = ufosParkADT.reserveUfo(request);
+      String ufoID = ufosPark.reserveUfo(request);
       // Como construir un mensaje con varias propiedades:
       // method chaining
       Ufo reply = Ufo.newBuilder()
                       .setId(ufoID)
                       .setCardNumber(request.getNumber())
+                      .setFee(ufosPark.fee())
                       .build();
       // return the Ufo
       responseObserver.onNext(reply);
@@ -102,7 +103,7 @@ public class UfosParkServer {
     public void assignUfo(Ufo request, 
                          StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
 
-        boolean isAssigned = ufosParkADT.assignUfo(request);
+        boolean isAssigned = ufosPark.assignUfo(request);
         // Como construir un mensaje con varias propiedades:
         // method chaining
         Processed reply = Processed.newBuilder()

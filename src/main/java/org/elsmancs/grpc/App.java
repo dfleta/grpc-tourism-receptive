@@ -22,9 +22,10 @@ public class App {
             card = CreditCard.newBuilder()
                                 .setOwner(args[0])
                                 .setNumber(args[1])
+                                .setCharge(0)
                                 .build();
                                 
-            new Card(args[0], args[1]);
+           // new Card(args[0], args[1]);
         }
 
         receptivo.dispatch(card);

@@ -18,11 +18,12 @@ class UfosDispatcher implements GuestDispatcher {
         Ufo ufo = ufosClient.Dispatch(card.getOwner(), card.getNumber());
 
         // Llamada al gRPC Pay para pagar la reserva
-        if (ufo != null  && PaymentClient.execute(card)) {
-            // this.flota.put(ufo.getKey(), card.number());
+        if (ufo != null  && PaymentClient.execute(card, ufo.getFee())) {
             logger.info("Aqui llamo al servicio para confirmar reserva UFO");
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
             System.out.println(ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
+        } else {
+            logger.info("No hay UFO o credito");
         }
 
         // El canal se reutilizan entre llamadas al server

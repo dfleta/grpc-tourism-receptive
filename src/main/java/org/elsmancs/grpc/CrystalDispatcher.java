@@ -18,11 +18,13 @@ class CrystalDispatcher implements GuestDispatcher {
         Crystal crystal = crystalClient.Dispatch(card.getOwner(), card.getNumber());
 
         // Llamada al gRPC Pay para pagar el crystal
-        if (crystal != null  && PaymentClient.execute(card)) {
+        if (crystal != null  && PaymentClient.execute(card, crystal.getFee())) {
             // this.flota.put(ufo.getKey(), card.number());
             logger.info("Llamada al servicio para confirmar unidades");
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
             System.out.println(crystalClient.Confirm(crystal));
+        } else {
+            logger.info("No hay crytal o credito");
         }
 
         // El canal se reutilizan entre llamadas al server

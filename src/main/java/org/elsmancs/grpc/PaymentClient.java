@@ -36,16 +36,15 @@ public class PaymentClient {
         blockingStub = PaymentGrpc.newBlockingStub(channel);
     }
 
-    // Obtener un UFO para la tarjeta
-    // Nombro el metodo en mayuscula porque en el
-    // fichero proto esta en mayuscula
-    public boolean Pay(String owner, String cardNumber) {
+    // Obtener autorizacion de un pago
+    public boolean Pay(String owner, String cardNumber, double fee) {
         
         logger.info("Intentaré procesar el pago para " + owner + " " + cardNumber + " ...");
 
         CreditCard request = CreditCard.newBuilder()
                                       .setOwner(owner)
                                       .setNumber(cardNumber)
+                                      .setCharge(fee)
                                       .build();
         Processed response;
         try {
@@ -55,17 +54,17 @@ public class PaymentClient {
             return false;
         }
         logger.info("Pago procesado :" + response.getIsProcessed() + " para " + request.getOwner() + ": " + request.getNumber());
-        return true;
+        return response.getIsProcessed();
     }
 
 
     /**
-     * Greet server. If provided, the first element of {@code args} is the name to use in the
-     * greeting. The second argument is the target server.
+     * Main method to run the client as standalone app.
      */
     public static void main(String[] args) throws Exception {
         String user = "Rick";
         String card = "123456789";
+        double charge = 500d;
         // Access a service running on the local machine on port 50061
         String target = "localhost:50061";
         // Allow passing in the user and target strings as command line arguments
@@ -96,7 +95,7 @@ public class PaymentClient {
 
         try {
             PaymentClient client = new PaymentClient(channel);
-            client.Pay(user, card);
+            client.Pay(user, card, charge);
         } finally {
             // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
             // resources the channel should be shut down when it will no longer be used. If it may be used
@@ -105,7 +104,7 @@ public class PaymentClient {
         }
     }
 
-    public static boolean execute(CreditCard card) throws Exception {
+    public static boolean execute(CreditCard card, double charge) throws Exception {
         
         String target = "localhost:50061";
         // Allow passing in the user and target strings as command line arguments        
@@ -121,7 +120,7 @@ public class PaymentClient {
 
         try {
             PaymentClient client = new PaymentClient(channel);
-            return client.Pay(card.getOwner(), card.getOwner());
+            return client.Pay(card.getOwner(), card.getOwner(), charge);
         } finally {
             // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
             // resources the channel should be shut down when it will no longer be used. If it may be used

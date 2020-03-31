@@ -41,10 +41,6 @@ message Ufo {
     // Pendiente:
     // CreditCard lo = 2;
     string cardNumber = 2;
+    // tarifa del UFO
+    double fee = 3;
 }
-
-/*
-message Confirmed {  
-  // Asigna el UFO indicado a la Card indicada
-  bool isUfoAssigned = 1;
-}*/

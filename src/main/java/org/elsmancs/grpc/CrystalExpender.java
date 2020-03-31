@@ -4,7 +4,7 @@ package org.elsmancs.grpc;
 class CrystalExpender {
 
     private int stock = 0;
-    private double itemCost = 0d;
+    private double itemCost = 50d;
 
     CrystalExpender() {
         this.stock = 100;
@@ -32,5 +32,10 @@ class CrystalExpender {
 
     int stock() {
         return this.stock;
+    }
+
+
+    double fee() {
+        return this.itemCost;
     }
 }

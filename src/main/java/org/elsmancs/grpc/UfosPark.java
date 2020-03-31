@@ -8,7 +8,7 @@ import java.util.Map;
 
 class UfosPark {
 
-    private double fee = 500d;
+    private final double fee = 2500d;
     private final Map<String, String> flota = new HashMap<String, String>();
     
     UfosPark() {
@@ -24,6 +24,10 @@ class UfosPark {
 
     void add(String ufoID) {
         flota.putIfAbsent(ufoID, null);
+    }
+
+    double fee() {
+        return this.fee;
     }
 
     public String reserveUfo(CreditCard card) {
