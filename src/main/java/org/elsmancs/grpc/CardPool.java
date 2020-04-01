@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.annotations.VisibleForTesting;
+
 class CardPool {
 
     private double credit = 3000d;
-    private final String SYMBOL = "EZI";
     private Map<String, Double> cardsPool = new HashMap<String, Double>();
 
     CardPool() {};
@@ -16,7 +17,8 @@ class CardPool {
         this.cardsPool.putIfAbsent(card.getNumber(), credit);
     }
 
-    private double credit(CreditCard card) {
+    @VisibleForTesting
+    double credit(CreditCard card) {
         return this.cardsPool.get(card.getNumber()).doubleValue();
     }
 

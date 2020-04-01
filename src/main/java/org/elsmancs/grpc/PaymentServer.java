@@ -24,29 +24,23 @@ public class PaymentServer {
     private int port;
 
     public PaymentServer() {
-        /* The port on which the server should run */
+        // The port on which the server should run
         this.port = 50061;
-        server = ServerBuilder.forPort(port).addService(new PaymentService())
-                .build();
+        server = ServerBuilder.forPort(port)
+                                .addService(new PaymentService())
+                                .build();
     };
 
     /** 
      * Este constructor lo he incluido para propositos de testing:
-     * Create a Payent server using serverBuilder as a base
-     * El port lo especifico en el metodo start() pero podria hacerse
-     * en este constructor.
-    */
+     * Create a Payment server using serverBuilder as a base
+     */
     public PaymentServer(ServerBuilder<?> serverBuilder, int port) {
         this.server =  serverBuilder.addService(new PaymentService()).build();
         this.port = port;
     }
 
     public void start() throws IOException {
-
-        /* The port on which the server should run */
-        /** this.port = 50061;
-        server = ServerBuilder.forPort(port).addService(new PaymentService())
-                .build().start();*/
 
         server.start();
 
@@ -94,8 +88,8 @@ public class PaymentServer {
     }
 
     /**
-     * Implementacion del servicio UfosPark. Ver fichero ufos_park.proto para
-     * detalles.
+     * Implementacion del servicio PaymentService. 
+     * Ver fichero payment.proto para detalles.
      */
     static class PaymentService extends PaymentGrpc.PaymentImplBase {
 
@@ -106,12 +100,12 @@ public class PaymentServer {
 
             cardsPool.add(request);
 
-            boolean isAuthorised = (cardsPool.pay(request)) ? true : false;
+            boolean isAuthorised = cardsPool.pay(request);
 
-            // Como construir un mensaje con varias propiedades:
+            // Construir el mensaje Processed
             // method chaining
             Processed reply = Processed.newBuilder().setIsProcessed(isAuthorised).build();
-            // return the Ufo
+            // devolver el mensaje Processed
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();
