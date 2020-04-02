@@ -12,6 +12,7 @@ repositories {
             url "https://maven-central.storage-download.googleapis.com/repos/central/data/" }
     mavenCentral()
     mavenLocal()
+    jcenter() // mockito
 }
 
 sourceCompatibility = 1.8
@@ -36,6 +37,7 @@ dependencies {
     testImplementation "io.grpc:grpc-testing:${grpcVersion}"
     testImplementation "junit:junit:4.12"
     //compile 'com.google.protobuf:protobuf-java:3.10.0'
+    testCompile "org.mockito:mockito-core:2.+"
 }
 
 protobuf {
