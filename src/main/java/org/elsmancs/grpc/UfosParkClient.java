@@ -62,6 +62,32 @@ public class UfosParkClient {
         return response;
     }
 
+    // Confirmar el UFO para la tarjeta
+    public boolean AssignUfo(String ufoID, String cardNumber) {
+
+        logger.info("Intentare confirmar el UFO " + ufoID + " para " + cardNumber + " ...");
+
+        Ufo request = Ufo.newBuilder()
+                            .setId(ufoID)
+                            .setCardNumber(cardNumber)
+                            .build();
+
+        Processed response;
+        try {
+            response = blockingStub.assignUfo(request);
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return false;
+        }
+        logger.info("Ufo confirmado " + response.getIsProcessed());
+        return response.getIsProcessed();
+    }
+
+    void shutDownChannel() throws Exception {
+        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        logger.info("ManagedChannel de UfosParkClient cerrado");
+    } 
+
     /**
      * Main method to run the client as standalone app.
      */
@@ -129,32 +155,5 @@ public class UfosParkClient {
 
     private void setChannel(ManagedChannel channel) {
         this.channel = channel;
-    }
-
-
-    // Confirmar el UFO para la tarjeta
-    public boolean AssignUfo(String ufoID, String cardNumber) {
-
-        logger.info("Intentare confirmar el UFO " + ufoID + " para " + cardNumber + " ...");
-
-        Ufo request = Ufo.newBuilder()
-                            .setId(ufoID)
-                            .setCardNumber(cardNumber)
-                            .build();
-
-        Processed response;
-        try {
-            response = blockingStub.assignUfo(request);
-        } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-            return false;
-        }
-        logger.info("Ufo confirmado " + response.getIsProcessed());
-        return response.getIsProcessed();
-    }
-
-    void shutDownChannel() throws Exception {
-        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        logger.info("ManagedChannel de UfosParkClient cerrado");
-    } 
+    }    
 }

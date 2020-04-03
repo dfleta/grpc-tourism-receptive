@@ -44,6 +44,10 @@ public class PaymentClientTest {
      * por lo que la implementacion de PaymentImplBase aun no existe
      * y hay que mockear su existencia (ver delegatesTo())
      * PaymentGrpc existe pues es generado mediante grpc-protocolbuffers y protoc
+     * 
+     * Podemos hacerlo de este modo porque PaymentService solo tiene un servicio:
+     * pay()
+     * Si tuviese más que uno => mockearlo en cada metodo: ver UfosParkClient Tests
      */
     private final PaymentGrpc.PaymentImplBase serviceImpl = mock(PaymentGrpc.PaymentImplBase.class, delegatesTo(
         
