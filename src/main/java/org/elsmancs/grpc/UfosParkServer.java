@@ -85,7 +85,7 @@ public class UfosParkServer {
     public void dispatch(CreditCard request, 
                          StreamObserver<org.elsmancs.grpc.Ufo> responseObserver) {
 
-      String ufoID = ufosPark.reserveUfo(request);
+      String ufoID = ufosPark.reserveUfo(request.getNumber());
       // Como construir un mensaje con varias propiedades:
       // method chaining
       Ufo reply = Ufo.newBuilder()
@@ -103,7 +103,7 @@ public class UfosParkServer {
     public void assignUfo(Ufo request, 
                          StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
 
-        boolean isAssigned = ufosPark.assignUfo(request);
+        boolean isAssigned = ufosPark.assignUfo(request.getId(), request.getCardNumber());
         // Como construir un mensaje con varias propiedades:
         // method chaining
         Processed reply = Processed.newBuilder()

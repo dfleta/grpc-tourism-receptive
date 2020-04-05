@@ -32,11 +32,11 @@ class UfosPark {
         return this.fee;
     }
 
-    public String reserveUfo(CreditCard card) {
+    public String reserveUfo(String cardNumber) {
 
         String ufoID = null;
 
-        if (!flota.containsValue(card.getNumber())) {
+        if (!flota.containsValue(cardNumber)) {
             for (Map.Entry<String, String> entry : this.flota.entrySet()) {
                 if (entry.getValue() == null) {
                     ufoID = entry.getKey();
@@ -55,9 +55,13 @@ class UfosPark {
     
     // implementar algoritmo ufo blocked
     // por eso dejo el return true
-    boolean assignUfo(Ufo ufo) {
-        this.flota.put(ufo.getId(), ufo.getCardNumber());
-        return true;
+    boolean assignUfo(String ufoID, String cardNumber) {
+        if (flota.containsKey(ufoID)) {
+            this.flota.put(ufoID, cardNumber);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     String getUfoOf(String cardNumber) {

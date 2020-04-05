@@ -36,38 +36,37 @@ public class UfosParkTest {
 
     @Test
     public void assignUfoTest() {
-        Ufo ufo = Ufo.newBuilder().setId("unox").setCardNumber("1111").build();
-        ufos.assignUfo(ufo);
-        assertTrue(ufos.containsCard("1111"));
-        assertEquals("unox", ufos.getUfoOf("1111"));
+        ufos.assignUfo("unx", "1111111111111");
+        assertTrue(ufos.containsCard("1111111111111"));
+        assertEquals("unx", ufos.getUfoOf("1111111111111"));
     }
 
     @Test
     public void getUfoOfTest() {
-        
-        Ufo ufo = Ufo.newBuilder().setId("unox").setCardNumber("1111").build();
-        ufos.assignUfo(ufo);
-        assertTrue(ufos.containsCard("1111"));
-        assertEquals("unox", ufos.getUfoOf("1111"));
-        assertFalse(ufos.containsCard("2222"));
-        assertNull(ufos.getUfoOf("2222"));
+
+        ufos.assignUfo("unx", "1111111111111");
+        assertTrue(ufos.containsCard("1111111111111"));
+        assertEquals("unx", ufos.getUfoOf("1111111111111"));
+        assertFalse(ufos.containsCard("222222222222"));
+        assertNull(ufos.getUfoOf("222222222222"));
 
     }
 
     @Test
     public void reserveUfoTest() {
         
-        CreditCard card = CreditCard.newBuilder().setOwner("Abradolf Lincler").setNumber("4916119711304546").build();
-        String ufoID = ufos.reserveUfo(card);
+        String cardNumber = "4916119711304546";
+
+        String ufoID = ufos.reserveUfo(cardNumber);
         assertNotEquals("no ufo reserved", ufoID);
 
-        ufos.assignUfo(Ufo.newBuilder().setId(ufoID).setCardNumber("4916119711304546").build());
-        assertTrue(ufos.containsCard(card.getNumber()));
+        ufos.assignUfo(ufoID, cardNumber);
+        assertTrue(ufos.containsCard(cardNumber));
         
         // ESTO A UNA REGLA??
         List<String> cards = ufos.cardNumbers()
                                     .stream()
-                                    .filter(n -> n == card.getNumber())
+                                    .filter(n -> n == cardNumber)
                                     .collect(Collectors.toList());
 
         assertEquals(1, cards.size(), 0);
@@ -76,19 +75,19 @@ public class UfosParkTest {
     @Test
     public void not_reserveUfoTest() {
 
-        CreditCard card = CreditCard.newBuilder().setOwner("Abradolf Lincler").setNumber("4916119711304546").build();
-        String ufoID = ufos.reserveUfo(card);
-        ufos.assignUfo(Ufo.newBuilder().setId(ufoID).setCardNumber("4916119711304546").build());
+        String cardNumber = "4916119711304546";
+        String ufoID = ufos.reserveUfo(cardNumber);
+        ufos.assignUfo(ufoID, "4916119711304546");
+        assertTrue(ufos.containsCard(cardNumber));
 
-        ufoID = ufos.reserveUfo(card);
-
+        ufoID = ufos.reserveUfo(cardNumber);
         assertEquals("no ufo reserved", ufoID);;
-        assertTrue(ufos.containsCard(card.getNumber()));
+        assertTrue(ufos.containsCard(cardNumber));
 
-        // ESTO A UNA REGLA
+        // ESTO A UNA REGLA ??
         List<String> cards = ufos.cardNumbers()
                                     .stream()
-                                    .filter(n -> n == card.getNumber())
+                                    .filter(n -> n == cardNumber)
                                     .collect(Collectors.toList());
 
         assertEquals(1, cards.size(), 0);
@@ -97,21 +96,25 @@ public class UfosParkTest {
     @Test
     public void dispatchNoUfoAvaliableTest() {
 
-        CreditCard card = CreditCard.newBuilder().setOwner("Abradolf Lincler").setNumber("4916119711304546").build();
-        String ufoID = ufos.reserveUfo(card);
+        String abradolf = "4916119711304546";
+        String ufoID = ufos.reserveUfo(abradolf);
+        ufos.assignUfo(ufoID, abradolf);
 
-        CreditCard squanchy = CreditCard.newBuilder().setOwner("Squanchy").setNumber("4444444444444444").build();
+        String squanchy = "4444444444444444";
         ufoID = ufos.reserveUfo(squanchy);
+        ufos.assignUfo(ufoID, squanchy);
 
-        CreditCard birdpearson = CreditCard.newBuilder().setOwner("Birdpearson").setNumber("1111111111111111").build(); 
+        String birdpearson = "1111111111111111"; 
         ufoID = ufos.reserveUfo(birdpearson);
+        ufos.assignUfo(ufoID, birdpearson);
 
-        CreditCard morty = CreditCard.newBuilder().setOwner("Morty").setNumber("0000000000000000").build();
-        ufoID = ufos.reserveUfo(morty);
+        // No quedan UFOs disponibles para Morty
+        String morty = "0000000000000000";
+        assertEquals("no ufo reserved", ufos.reserveUfo(morty));
 
         List<String> cards = ufos.cardNumbers()
                                     .stream()
-                                    .filter(n -> n == morty.getNumber())
+                                    .filter(n -> n == morty)
                                     .collect(Collectors.toList());
 
         assertEquals(0, cards.size(), 0);
