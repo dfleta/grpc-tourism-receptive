@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.annotations.VisibleForTesting;
+
 class UfosPark {
 
     private final double fee = 2500d;
@@ -82,10 +84,12 @@ class UfosPark {
      * Testing
      */
 
+    @VisibleForTesting
     boolean containsCard(String cardNumber) {
         return this.flota.containsValue(cardNumber);
     }
 
+    @VisibleForTesting
     Collection<String> cardNumbers() {
         return this.flota.values();
     }
