@@ -16,12 +16,17 @@ class CrystalExpender {
         this.itemCost = itemCost;
     }
 
-    int dispatch(CreditCard card) {
+    int dispatch(String cardNumber) {
         return (this.stock > 0)? 1: 0;
     }
 
-    boolean confirm(Crystal crystal) {
-        return (this.stock - crystal.getUnidades() > 0)? true: false;
+    boolean confirm(int units) {
+        if (this.stock - units >= 0) {
+            this.stock -= units;
+            return true;
+        } else {
+            return false;
+        } 
     }
 
     @Override
@@ -33,7 +38,6 @@ class CrystalExpender {
     int stock() {
         return this.stock;
     }
-
 
     double fee() {
         return this.itemCost;
