@@ -63,7 +63,6 @@ public class UfosParkTest {
         ufos.assignUfo(ufoID, cardNumber);
         assertTrue(ufos.containsCard(cardNumber));
         
-        // ESTO A UNA REGLA??
         List<String> cards = ufos.cardNumbers()
                                     .stream()
                                     .filter(n -> n == cardNumber)
@@ -84,7 +83,6 @@ public class UfosParkTest {
         assertEquals("no ufo reserved", ufoID);;
         assertTrue(ufos.containsCard(cardNumber));
 
-        // ESTO A UNA REGLA ??
         List<String> cards = ufos.cardNumbers()
                                     .stream()
                                     .filter(n -> n == cardNumber)

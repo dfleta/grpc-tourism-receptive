@@ -30,6 +30,11 @@ public class PaymentServerTest {
     @Rule
     public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
 
+    /**
+     * The class "GrpcServerRule" (from "grpc-java/testing") 
+     * is a JUnit TestRule that creates a InProcessServer and a ManagedChannel.
+     */
+
     private PaymentServer server;
     private ManagedChannel inProcessChannel;
 
@@ -46,7 +51,7 @@ public class PaymentServerTest {
 
         // Create a server, add service, start, and register for automatic graceful
         // shutdown.
-        int port = 50061;
+        int port = 50051;
         server = new PaymentServer(InProcessServerBuilder.forName(serverName).directExecutor(),
                                     port);
 

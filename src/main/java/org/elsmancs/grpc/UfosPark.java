@@ -32,7 +32,7 @@ class UfosPark {
         return this.fee;
     }
 
-    public String reserveUfo(String cardNumber) {
+    String reserveUfo(String cardNumber) {
 
         String ufoID = null;
 

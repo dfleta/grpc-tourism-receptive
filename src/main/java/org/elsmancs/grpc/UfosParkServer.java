@@ -17,102 +17,107 @@ import java.util.logging.Logger;
  */
 public class UfosParkServer {
 
-  private static final Logger logger = Logger.getLogger(UfosParkServer.class.getName());
+    private static final Logger logger = Logger.getLogger(UfosParkServer.class.getName());
 
-  private Server server;
+    private Server server;
+    private int port;
 
-  private void start() throws IOException {
+    public UfosParkServer() {
+        // The port on which the server should run
+        this.port = 50061;
+        server = ServerBuilder.forPort(port)
+                                .addService(new UfosParkService())
+                                .build();
+    };
 
-    /* The port on which the server should run */
-    int port = 50051;
-    server = ServerBuilder.forPort(port)
-                          .addService(new UfosParkService()) // <= UfosParkService()
-                          .build()
-                          .start();
+    public UfosParkServer(ServerBuilder<?> serverBuilder, int port) {
+        this.server =  serverBuilder.addService(new UfosParkService()).build();
+        this.port = port;
+    }
 
-    logger.info("Server started, listening on " + port);
+    public void start() throws IOException {
 
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        // Use stderr here since the logger may have been reset by its JVM shutdown
-        // hook.
-        System.err.println("*** shutting down gRPC server since JVM is shutting down");
-        try {
-          UfosParkServer.this.stop();
-        } catch (InterruptedException e) {
-          e.printStackTrace(System.err);
+        /* The port on which the server should run */
+        //int port = 50051;
+        // server = ServerBuilder.forPort(port).addService(new UfosParkService()).build().start();
+
+        server.start();
+
+        logger.info("Server started, listening on " + port);
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                // Use stderr here since the logger may have been reset by its JVM shutdown
+                // hook.
+                System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                try {
+                    UfosParkServer.this.stop();
+                } catch (InterruptedException e) {
+                    e.printStackTrace(System.err);
+                }
+                System.err.println("*** server shut down");
+            }
+        });
+    }
+
+    void stop() throws InterruptedException {
+        if (server != null) {
+            server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }
-        System.err.println("*** server shut down");
-      }
-    });
-  }
-
-  private void stop() throws InterruptedException {
-    if (server != null) {
-      server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
-    }
-  }
-
-  /**
-   * Await termination on the main thread since the grpc library uses daemon
-   * threads.
-   */
-  private void blockUntilShutdown() throws InterruptedException {
-    if (server != null) {
-      server.awaitTermination();
-    }
-  }
-
-  /**
-   * Main launches the server from the command line.
-   */
-  public static void main(String[] args) throws IOException, InterruptedException {
-    final UfosParkServer server = new UfosParkServer();
-    server.start();
-    server.blockUntilShutdown();
-  }
-
-  /**
-   * Implementacion del servicio UfosPark. Ver fichero ufos_park.proto para
-   * detalles.
-   */
-  static class UfosParkService extends UfosParkGrpc.UfosParkImplBase {
-    
-    private UfosPark ufosPark = new UfosPark(); 
-
-    @Override
-    public void dispatch(CreditCard request, 
-                         StreamObserver<org.elsmancs.grpc.Ufo> responseObserver) {
-
-      String ufoID = ufosPark.reserveUfo(request.getNumber());
-      // Como construir un mensaje con varias propiedades:
-      // method chaining
-      Ufo reply = Ufo.newBuilder()
-                      .setId(ufoID)
-                      .setCardNumber(request.getNumber())
-                      .setFee(ufosPark.fee())
-                      .build();
-      // return the Ufo
-      responseObserver.onNext(reply);
-      // Specify that we’ve finished dealing with the RPC.
-      responseObserver.onCompleted();
     }
 
-    @Override
-    public void assignUfo(Ufo request, 
-                         StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
-
-        boolean isAssigned = ufosPark.assignUfo(request.getId(), request.getCardNumber());
-        // Como construir un mensaje con varias propiedades:
-        // method chaining
-        Processed reply = Processed.newBuilder()
-                                    .setIsProcessed(isAssigned)
-                                    .build();
-        // return the Ufo
-        responseObserver.onNext(reply);
-        // Specify that we’ve finished dealing with the RPC.
-        responseObserver.onCompleted();
+    /**
+     * Await termination on the main thread since the grpc library uses daemon
+     * threads.
+     */
+    private void blockUntilShutdown() throws InterruptedException {
+        if (server != null) {
+            server.awaitTermination();
+        }
     }
-  }
+
+    /**
+     * Main launches the server from the command line.
+     */
+    public static void main(String[] args) throws IOException, InterruptedException {
+        final UfosParkServer server = new UfosParkServer();
+        server.start();
+        server.blockUntilShutdown();
+    }
+
+    /**
+     * Implementacion del servicio UfosPark. Ver fichero ufos_park.proto para
+     * detalles.
+     */
+    static class UfosParkService extends UfosParkGrpc.UfosParkImplBase {
+
+        private UfosPark ufosPark = new UfosPark();
+
+        @Override
+        public void dispatch(CreditCard request, StreamObserver<org.elsmancs.grpc.Ufo> responseObserver) {
+
+            String ufoID = ufosPark.reserveUfo(request.getNumber());
+            // Como construir un mensaje con varias propiedades:
+            // method chaining
+            Ufo reply = Ufo.newBuilder().setId(ufoID).setCardNumber(request.getNumber()).setFee(ufosPark.fee()).build();
+            // return the Ufo
+            responseObserver.onNext(reply);
+            // Specify that we’ve finished dealing with the RPC.
+            responseObserver.onCompleted();
+        }
+
+        @Override
+        public void assignUfo(Ufo request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
+
+            boolean isAssigned = ufosPark.assignUfo(request.getId(), request.getCardNumber());
+            // Como construir un mensaje con varias propiedades:
+            // method chaining
+            Processed reply = Processed.newBuilder().setIsProcessed(isAssigned).build();
+            // return the Ufo
+            responseObserver.onNext(reply);
+            // Specify that we’ve finished dealing with the RPC.
+            responseObserver.onCompleted();
+        }
+    }
 }
