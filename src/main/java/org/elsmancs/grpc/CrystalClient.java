@@ -62,6 +62,52 @@ public class CrystalClient {
         return response;
     }
 
+    // Confirmar el crystal para la tarjeta
+    public boolean Confirm(int unidades) {
+
+        logger.info("Intentando confirmar " + unidades + " unidades de crystal" + " ...");
+
+        Crystal request = Crystal.newBuilder()
+                            .setUnidades(unidades)
+                            .build();
+
+        Processed response;
+        try {
+            response = blockingStub.confirm(request);
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return false;
+        }
+        logger.info(unidades + " Crystal confirmado " + response.getIsProcessed());
+        return response.getIsProcessed();
+    }
+
+
+    static CrystalClient init() {
+        
+        String target = "localhost:50071";
+        
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
+                // Channels are secure by default (via SSL/TLS). For the example we disable TLS
+                // to avoid
+                // needing certificates.
+                .usePlaintext().build();
+
+        CrystalClient crystalClient = new CrystalClient(channel);
+        crystalClient.setChannel(channel);
+        return crystalClient;
+    }
+
+    private void setChannel(ManagedChannel channel) {
+        this.channel = channel;
+    }
+
+    void shutDownChannel() throws Exception {
+        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        logger.info("ManagedChannel de CrystalClient cerrado");
+    }
+
+
     /**
      * Main method to run the client as standalone app.
      */
@@ -110,50 +156,4 @@ public class CrystalClient {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
     }
-
-
-    static CrystalClient init() {
-        
-        String target = "localhost:50071";
-        
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
-                // Channels are secure by default (via SSL/TLS). For the example we disable TLS
-                // to avoid
-                // needing certificates.
-                .usePlaintext().build();
-
-        CrystalClient crystalClient = new CrystalClient(channel);
-        crystalClient.setChannel(channel);
-        return crystalClient;
-    }
-
-    private void setChannel(ManagedChannel channel) {
-        this.channel = channel;
-    }
-
-
-    // Confirmar el crystal para la tarjeta
-    public boolean Confirm(Crystal crystal) {
-
-        logger.info("Intentando confirmar " + crystal.getUnidades() + " unidades de crystal" + " ...");
-
-        Crystal request = Crystal.newBuilder()
-                            .setUnidades(crystal.getUnidades())
-                            .build();
-
-        Processed response;
-        try {
-            response = blockingStub.confirm(request);
-        } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-            return false;
-        }
-        logger.info(crystal.getUnidades() + " Crystal confirmado " + response.getIsProcessed());
-        return response.getIsProcessed();
-    }
-
-    void shutDownChannel() throws Exception {
-        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        logger.info("ManagedChannel de CrystalClient cerrado");
-    } 
 }
