@@ -1,50 +1,64 @@
-Ricksy Business
-===============
+Ricksy Business - GRPC
+======================
 
-Rick se queda a cargo Morty y Summer, y celebra una pedazo de fiesta. 
-Entre los invitados hay adolescentes, aliens, Gearhead, Squanchy, Birdpearson y Abradolph Lincler (una combinación de DNA de Adolf Hitler y Abraham Lincoln).
+A "tourism" receptive system based on GRPC (Google remote procedure call framework), implementing the observer GoF design pattern, and test driven developed.
 
-Cuando un invitado/a llega a la fiesta, se le da de alta en el receptivo del sistema mediante su tarjeta de crédito.
+## User stories
 
-El receptivo carga en el crédito de la tarjeta:
- - El coste del UberOvni de vuelta a casa
- - El coste del pack de bienvenida (Collaxion crystals).
+Based on the plot of the chapter 11th of Rick and Morty first season series.
 
-El componente de reserva de Ovnis y el componente de entrega del pack de bienvenida observan al componente receptivo, de modo que cuando el receptivo da de alta a un invitado/a automáticamente cargan en la tarjeta del invitado/a el coste de ambos servicios. 
+Rick and Summer throw a party at home. Among the guests, there are teenagers, aliens, Gearhead, Squanchy, Birdpearson and Abradolph Lincler (a DNA mixture of Adolf Hitler and Abraham Lincoln).
 
+When a guest enters the party he /she is processed in the receptive "tourist" system that Rick has developed ad hoc. The guest presents his /her credit card and the system charges:
 
-## Prepara el proyecto
+ - The reservation cost of a UFO to safely return home when the party is over.
+ - The cost of a welcome pack, a piece of Collaxion Crystal, Rick's favourite amenities.
 
- 1. Crea un nuevo repo PRIVADO en tu cuenta en **Github** y compártelo con el usuario dfleta.
- 2. Crea un nuevo directorio en tu equipo y **clona el repositorio** de Github.
- 3. Abre VSCode /Eclipse /Netbeans y **establece como workspace** el directorio que has clonado.
- 4. Crea un proyecto **Gradle** o **Maven** que incluya tu **nombre y apellidos**.
- 5. Pon el proyecto en seguimiento en **Git** y configura `.gitignore`.
- 5. Copia y pega la función principal `RicksyBusiness.java`. Utilízala como guía en el proceso TDD. **No puedes modificar su código**, pero sí puedes comentar aquellas partes que aun no hayas implementado.
- 7. Completa las clases que aquí se indican **implementando los casos test que necesites**. Practica **TDD**.
- 8. **Realiza `commits` como mínimo cada vez que termines una historia de usuario**. Sin commit periódicos, no corrijo el examen.
+## Architecture
 
+Rick is such a huge fan of the **GoF design patterns** book that he desings the system architecture by using the **observer pattern**. Both, the UFO reservation component and the crystal expender component, observe the receptive component, therefore when a guest is processed by the receptive it charges automatically in the credit card the cost of both services. Of course, these system desing is conform with the **SOLID Open Closed Principle** (also respects **Dependency Inversion** Principle), so it is not necessary to modify the existing code to add and enable a new service component.
 
- ## Cómo entregar el código
+As Rick find himself bored till the party stats, he decides to learn about **gRPC** - a _"modern open source high performance RPC framework by Google"_- and develops all the three components (UFOs park, crystal expender and payment services) running in separate **microservices**.
 
- 1. Crea un repo PRIVADO en tu GitHub y compártelo con el usuario dfleta.
- 2. **Realiza commits periódicamente** mientras avanzas en el desarrollo de la aplicación. Sin commit periódicos, no corrijo el examen.
- 3. Realiza un `push` al repo remoto en GitHub **SOLO cuando hayas terminado el proyecto**.
- 3. Si quires, desde Eclipse /Netbeans /IntelIJ exporta el proyecto a un fichero. En VSCode, comprime en un ZIP la carpeta del proyecto.
- 4. Envíame el archivo ZIP por correo electrónico. No se admiten ficheros .rar.
+## Testing
+
+Rick has written the code with tons of fury and caffeine but, quoting himself _"I programmed you to believe that"_, is the **TDD** that saves the day, . **Test Driven Development**, paying the **technical debt** every day, is a matter of _wubba lubba dub dub_ concern to him.
+**Conventional commits** are preferred too. 
 
 
- ## Salida de la aplicación
+## Installation
 
-Intenta que la salida del programa sea lo más parecida posible a las imágenes que se proporcionan.
+Clone the repo and move to the main folder. Then:
 
+```bash
+$ ./gradlew clean build
+$ ./gradle installDist
+```
 
-## Historias de usuario /casos de uso
+## Usage
 
-Las historias de usuario están enunciadas en el script principal `RicksyBusiness.java`
+### Start the services:
 
+``` bash
+$ ./build/install/grpc-ricksy-business/bin/payment-server
+$ ./build/install/grpc-ricksy-business/bin/crystal-expender-server
+$ ./build/install/grpc-ricksy-business/bin/ufos-park-server
+```
 
-## Diagrama de clases UML
+### Run the main app:
 
-Sigue el diagrama de clase UML proporcionado para construir la aplicación.
-Si añades algún componente, dibújalo a mano alzada sobre el diagrama.
+Morty is joining the party (not without regret):
+
+```
+$ ./build/install/grpc-ricksy-business/bin/app Morty 111111111111
+```
+
+Also, Rick friends are welcome too:
+
+``` bash
+$ ./build/install/grpc-ricksy-business/bin/app Abradolph_Lincler 4916119711304546
+
+$ ./build/install/grpc-ricksy-business/bin/app Squanchy 4444444444444444
+
+$ ./build/install/grpc-ricksy-business/bin/app Gearhead 8888888888888888
+```
