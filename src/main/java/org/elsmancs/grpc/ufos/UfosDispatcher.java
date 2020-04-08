@@ -1,13 +1,17 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.ufos;
+
+import org.elsmancs.grpc.GuestDispatcher;
+import org.elsmancs.grpc.Ufo;
 
 import java.util.logging.Logger;
+import org.elsmancs.grpc.payment.PaymentClient;
 
 
-class UfosDispatcher implements GuestDispatcher {
+public class UfosDispatcher implements GuestDispatcher {
 
     private static final Logger logger = Logger.getLogger(UfosDispatcher.class.getName());
 
-    UfosDispatcher() {}
+    public UfosDispatcher() {}
 
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws Exception {
@@ -29,6 +33,5 @@ class UfosDispatcher implements GuestDispatcher {
         // El canal se reutiliza entre llamadas al server
         // Cerrarlo al terminar
         ufosClient.shutDownChannel();
-        
     }
 }

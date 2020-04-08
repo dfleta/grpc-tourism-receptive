@@ -1,8 +1,12 @@
 
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.payment;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.PaymentGrpc;
+import org.elsmancs.grpc.Processed;
 
 import io.grpc.ManagedChannel;
 import io.grpc.inprocess.InProcessChannelBuilder;

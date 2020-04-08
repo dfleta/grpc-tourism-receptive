@@ -71,14 +71,14 @@ sourceSets {
 startScripts.enabled = false
 
 task UfosParkServer(type: CreateStartScripts) {
-    mainClassName = 'org.elsmancs.grpc.UfosParkServer'
+    mainClassName = 'org.elsmancs.grpc.ufos.UfosParkServer'
     applicationName = 'ufos-park-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task UfosParkClient(type: CreateStartScripts) {
-    mainClassName = 'org.elsmancs.grpc.UfosParkClient'
+    mainClassName = 'org.elsmancs.grpc.ufos.UfosParkClient'
     applicationName = 'ufos-park-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
@@ -92,28 +92,28 @@ task Dispatcher(type: CreateStartScripts) {
 }
 
 task PaymentServer(type: CreateStartScripts) {
-    mainClassName = 'org.elsmancs.grpc.PaymentServer'
+    mainClassName = 'org.elsmancs.grpc.payment.PaymentServer'
     applicationName = 'payment-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task PaymentClient(type: CreateStartScripts) {
-    mainClassName = 'org.elsmancs.grpc.PaymentClient'
+    mainClassName = 'org.elsmancs.grpc.payment.PaymentClient'
     applicationName = 'payment-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task CrystalServer(type: CreateStartScripts) {
-    mainClassName = 'org.elsmancs.grpc.CrystalServer'
+    mainClassName = 'org.elsmancs.grpc.crystal.CrystalServer'
     applicationName = 'crystal-expender-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task CrystalClient(type: CreateStartScripts) {
-    mainClassName = 'org.elsmancs.grpc.CrystalClient'
+    mainClassName = 'org.elsmancs.grpc.crystal.CrystalClient'
     applicationName = 'crystal-expender-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath

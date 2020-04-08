@@ -3,7 +3,11 @@
  * Client side Streaming RPC
  */
 
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.payment;
+
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.PaymentGrpc;
+import org.elsmancs.grpc.Processed;
 
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
@@ -127,7 +131,5 @@ public class PaymentClient {
             // again leave it running.
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
-    }
-
-    
+    }    
 }

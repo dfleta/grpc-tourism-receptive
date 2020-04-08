@@ -1,5 +1,8 @@
 package org.elsmancs.grpc;
 
+import org.elsmancs.grpc.crystal.CrystalDispatcher;
+import org.elsmancs.grpc.ufos.UfosDispatcher;
+
 public class App {
     
     public static void main(String[] args) throws Exception {

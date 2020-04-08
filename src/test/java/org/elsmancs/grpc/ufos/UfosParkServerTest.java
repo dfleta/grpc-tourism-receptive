@@ -1,10 +1,14 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.ufos;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Processed;
+import org.elsmancs.grpc.UfosParkGrpc;
+import org.elsmancs.grpc.Ufo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -78,7 +82,7 @@ public class UfosParkServerTest {
                                         .setNumber("111111111111")
                                         .build();
 
-        Ufo response = blockingStub.dispatch(request);
+        org.elsmancs.grpc.Ufo response = blockingStub.dispatch(request);
 
         assertEquals("111111111111", response.getCardNumber());
         assertNotEquals("no ufo reserved", response.getId());        

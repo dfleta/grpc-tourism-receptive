@@ -1,9 +1,13 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.crystal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Crystal;
+import org.elsmancs.grpc.CrystalExpenderGrpc;
+import org.elsmancs.grpc.Processed;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

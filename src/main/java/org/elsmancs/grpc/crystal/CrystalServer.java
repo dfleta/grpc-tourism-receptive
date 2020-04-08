@@ -3,7 +3,7 @@
  * Server side Streaming RPC
  */
 
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.crystal;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -11,6 +11,11 @@ import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Crystal;
+import org.elsmancs.grpc.CrystalExpenderGrpc;
+import org.elsmancs.grpc.Processed;
 
 /**
  * Server that manages startup/shutdown of a {@code UfosPark} server.

@@ -4,6 +4,8 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import java.util.concurrent.TimeUnit;
 
+import org.elsmancs.grpc.ufos.UfosParkClient;
+
 
 public class Dispatcher {
 

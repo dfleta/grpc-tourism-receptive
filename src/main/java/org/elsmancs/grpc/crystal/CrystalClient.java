@@ -3,7 +3,7 @@
  * Client side Streaming RPC
  */
 
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.crystal;
 
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
@@ -12,6 +12,11 @@ import io.grpc.StatusRuntimeException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Crystal;
+import org.elsmancs.grpc.CrystalExpenderGrpc;
+import org.elsmancs.grpc.Processed;
 
 /**
  * A simple client that requests Collaxion crytal from the {@link CrystalServer}.
@@ -43,7 +48,7 @@ public class CrystalClient {
     // Obtener crytal para la tarjeta
     // Nombro el metodo en mayuscula porque en el
     // fichero proto esta en mayuscula
-    public Crystal Dispatch(String owner, String cardNumber) {
+    Crystal Dispatch(String owner, String cardNumber) {
 
         logger.info("Intentaré reservar Collaxion para " + owner + " ...");
 
@@ -63,7 +68,7 @@ public class CrystalClient {
     }
 
     // Confirmar el crystal para la tarjeta
-    public boolean Confirm(int unidades) {
+    boolean Confirm(int unidades) {
 
         logger.info("Intentando confirmar " + unidades + " unidades de crystal" + " ...");
 

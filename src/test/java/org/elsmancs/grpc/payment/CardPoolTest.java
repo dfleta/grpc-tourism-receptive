@@ -1,8 +1,9 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.payment;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import org.elsmancs.grpc.CreditCard;
 import org.junit.Before;
 
 public class CardPoolTest {

@@ -1,4 +1,4 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.crystal;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

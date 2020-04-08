@@ -1,4 +1,4 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.ufos;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -6,7 +6,10 @@ import static org.junit.Assert.assertNull;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.elsmancs.grpc.CrystalExpenderGrpc.CrystalExpenderImplBase;
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Processed;
+import org.elsmancs.grpc.Ufo;
+import org.elsmancs.grpc.UfosParkGrpc.UfosParkImplBase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,7 +24,7 @@ import io.grpc.testing.GrpcCleanupRule;
 import io.grpc.util.MutableHandlerRegistry;
 
 @RunWith(JUnit4.class)
-public class CrystalClientTest {
+public class UfosParkClientTest {
     /**
      * This rule manages automatic graceful shutdown for the registered server at
      * the end of test.
@@ -31,7 +34,7 @@ public class CrystalClientTest {
 
     private final MutableHandlerRegistry serviceRegistry = new MutableHandlerRegistry();
 
-    private CrystalClient client;
+    private UfosParkClient client;
 
     @Before
     public void setUp() throws Exception {
@@ -45,7 +48,7 @@ public class CrystalClientTest {
         grpcCleanup.register(InProcessServerBuilder.forName(serverName).fallbackHandlerRegistry(serviceRegistry)
                 .directExecutor().build().start());
 
-        client = new CrystalClient(
+        client = new UfosParkClient(
                 grpcCleanup.register(InProcessChannelBuilder.forName(serverName).directExecutor().build()));
 
     }
@@ -60,27 +63,27 @@ public class CrystalClientTest {
         CreditCard requestCard = CreditCard.newBuilder().setOwner("Rick").setNumber("1111").build();
         final AtomicReference<CreditCard> cardDelivered = new AtomicReference<CreditCard>();
 
-        // Mock de la respuesta /mensaje Crystal del servicio
-        Crystal responseCrystal = Crystal.newBuilder().setUnidades(1).setFee(50).build();
+        // Mock de la respuesta /mensaje UFO del servicio
+        Ufo responseUfo = Ufo.newBuilder().setCardNumber("1111").setFee(500).build();
 
         // implement the fake service
-        CrystalExpenderImplBase dispatchImpl = new CrystalExpenderImplBase() {
+        UfosParkImplBase dispatchImpl = new UfosParkImplBase() {
             @Override
-            public void dispatch(CreditCard card, StreamObserver<Crystal> responseObserver) {
+            public void dispatch(CreditCard card, StreamObserver<Ufo> responseObserver) {
                 // para chequear que la construccion de la Card en el client se realiza OK
                 cardDelivered.set(card);
-                responseObserver.onNext(responseCrystal);
+                responseObserver.onNext(responseUfo);
                 responseObserver.onCompleted();
             }
         };
 
         serviceRegistry.addService(dispatchImpl);
 
-        Crystal crystalDelivered = client.Dispatch("Rick", "1111");
+        Ufo ufoDelivered = client.Dispatch("Rick", "1111");
 
         assertEquals(requestCard, cardDelivered.get());
-        assertEquals(responseCrystal.getUnidades(), crystalDelivered.getUnidades(), 0);
-        assertEquals(responseCrystal.getFee(), crystalDelivered.getFee(), 0.1);
+        assertEquals(responseUfo.getCardNumber(), ufoDelivered.getCardNumber());
+        assertEquals(responseUfo.getFee(), ufoDelivered.getFee(), 0.1);
     }
 
     @Test
@@ -94,9 +97,9 @@ public class CrystalClientTest {
         final StatusRuntimeException fakeError = new StatusRuntimeException(io.grpc.Status.DATA_LOSS);
 
         // implement the fake service
-        CrystalExpenderImplBase dispatchImpl = new CrystalExpenderImplBase() {
+        UfosParkImplBase dispatchImpl = new UfosParkImplBase() {
             @Override
-            public void dispatch(CreditCard card, StreamObserver<Crystal> responseObserver) {
+            public void dispatch(CreditCard card, StreamObserver<Ufo> responseObserver) {
                 // para chequear que la construccion de la Card en el client se realiza OK
                 cardDelivered.set(card);
                 responseObserver.onError(fakeError);
@@ -105,28 +108,28 @@ public class CrystalClientTest {
 
         serviceRegistry.addService(dispatchImpl);
 
-        Crystal crystalDelivered = client.Dispatch("Rick", "1111");
+        Ufo ufoDelivered = client.Dispatch("Rick", "1111");
 
         assertEquals(requestCard, cardDelivered.get());
-        assertNull(crystalDelivered);
+        assertNull(ufoDelivered);
     }
 
     @Test
-    public void confirm_test() {
+    public void assignUfo_test() {
 
-        // Mensaje Crystal al servicio
-        Crystal request = Crystal.newBuilder().setUnidades(1).build();
-        AtomicReference<Crystal> crystalDelivered = new AtomicReference<Crystal>();
+        // Mensaje Ufo al servicio
+        Ufo requestUfo = Ufo.newBuilder().setId("unox").setCardNumber("1111").build();
+        AtomicReference<Ufo> ufoDelivered = new AtomicReference<Ufo>();
 
         // Mock de la respuesta /mensaje Processed del servicio
         Processed responseProcessed = Processed.newBuilder().setIsProcessed(true).build();
 
         // fake service
-        CrystalExpenderImplBase confirmImpl = new CrystalExpenderImplBase() {
+        UfosParkImplBase assignImpl = new UfosParkImplBase() {
             @Override
-            public void confirm(Crystal request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
+            public void assignUfo(Ufo request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
                 // para chequear que la construccion del Ufo en el client se realiza OK
-                crystalDelivered.set(request);
+                ufoDelivered.set(request);
                 // return the Ufo
                 responseObserver.onNext(responseProcessed);
                 // Specify that we’ve finished dealing with the RPC.
@@ -134,40 +137,40 @@ public class CrystalClientTest {
             }
         };
 
-        serviceRegistry.addService(confirmImpl);
+        serviceRegistry.addService(assignImpl);
 
-        boolean processedDelivered = client.Confirm(1);
+        boolean processedDelivered = client.AssignUfo("unox", "1111");
 
-        assertEquals(request, crystalDelivered.get());
+        assertEquals(requestUfo, ufoDelivered.get());
         assertEquals(responseProcessed.getIsProcessed(), processedDelivered);
     }
 
     @Test
-    public void confirm_error_test() {
+    public void assignUfo_error_test() {
 
-        // Mensaje Crystal al servicio
-        Crystal requestCrytal = Crystal.newBuilder().setUnidades(1).build();
-        AtomicReference<Crystal> crystalDelivered = new AtomicReference<Crystal>();
+        // Mensaje Ufo al servicio
+        Ufo requestUfo = Ufo.newBuilder().setId("unox").setCardNumber("1111").build();
+        AtomicReference<Ufo> ufoDelivered = new AtomicReference<Ufo>();
 
         // Si el servidor responde con un error, el cliente devuelve false
         final StatusRuntimeException fakeError = new StatusRuntimeException(io.grpc.Status.DATA_LOSS);
 
         // fake service
-        CrystalExpenderImplBase confirmImpl = new CrystalExpenderImplBase() {
+        UfosParkImplBase assignImpl = new UfosParkImplBase() {
             @Override
-            public void confirm(Crystal request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
+            public void assignUfo(Ufo request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
                 // para chequear que la construccion del Ufo en el client se realiza OK
-                crystalDelivered.set(request);
+                ufoDelivered.set(request);
                 // return the Ufo
-                responseObserver.onError(fakeError);;
+                responseObserver.onError(fakeError);
             }
         };
 
-        serviceRegistry.addService(confirmImpl);
+        serviceRegistry.addService(assignImpl);
 
-        boolean processedDelivered = client.Confirm(1);
+        boolean processedDelivered = client.AssignUfo("unox", "1111");
 
-        assertEquals(requestCrytal, crystalDelivered.get());
+        assertEquals(requestUfo, ufoDelivered.get());
         assertFalse(processedDelivered);
     }
 }

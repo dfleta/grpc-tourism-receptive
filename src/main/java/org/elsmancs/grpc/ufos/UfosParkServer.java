@@ -3,8 +3,12 @@
  * Server side Streaming RPC
  */
 
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.ufos;
 
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Processed;
+import org.elsmancs.grpc.Ufo;
+import org.elsmancs.grpc.UfosParkGrpc;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -24,7 +28,7 @@ public class UfosParkServer {
 
     public UfosParkServer() {
         // The port on which the server should run
-        this.port = 50061;
+        this.port = 50051;
         server = ServerBuilder.forPort(port)
                                 .addService(new UfosParkService())
                                 .build();

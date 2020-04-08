@@ -1,4 +1,4 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.ufos;
 
 import java.util.Arrays;
 import java.util.Collection;

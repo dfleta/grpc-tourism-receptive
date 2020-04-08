@@ -1,13 +1,17 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.crystal;
 
 import java.util.logging.Logger;
 
+import org.elsmancs.grpc.Crystal;
+import org.elsmancs.grpc.GuestDispatcher;
+import org.elsmancs.grpc.payment.PaymentClient;
 
-class CrystalDispatcher implements GuestDispatcher {
+
+public class CrystalDispatcher implements GuestDispatcher {
 
     private static final Logger logger = Logger.getLogger(CrystalDispatcher.class.getName());
 
-    CrystalDispatcher() {}
+    public CrystalDispatcher() {}
 
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws Exception {
@@ -27,9 +31,8 @@ class CrystalDispatcher implements GuestDispatcher {
             logger.info("No hay crystal o credito");
         }
 
-        // El canal se reutilizan entre llamadas al server
+        // El canal se reutiliza entre llamadas al server
         // Cerrarlo al terminar
         crystalClient.shutDownChannel();
-        
     }
 }

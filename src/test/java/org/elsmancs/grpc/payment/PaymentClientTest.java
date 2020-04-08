@@ -1,10 +1,14 @@
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.payment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.PaymentGrpc;
+import org.elsmancs.grpc.Processed;
 
 import io.grpc.ManagedChannel;
 import io.grpc.inprocess.InProcessChannelBuilder;

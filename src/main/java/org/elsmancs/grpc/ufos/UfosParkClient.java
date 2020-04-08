@@ -3,7 +3,7 @@
  * Client side Streaming RPC
  */
 
-package org.elsmancs.grpc;
+package org.elsmancs.grpc.ufos;
 
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
@@ -12,6 +12,11 @@ import io.grpc.StatusRuntimeException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.elsmancs.grpc.CreditCard;
+import org.elsmancs.grpc.Processed;
+import org.elsmancs.grpc.Ufo;
+import org.elsmancs.grpc.UfosParkGrpc;
 
 /**
  * A simple client that requests a UFO from the {@link UfosParkServer}.
