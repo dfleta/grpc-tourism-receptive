@@ -45,9 +45,9 @@ public class CrystalClient {
         blockingStub = CrystalExpenderGrpc.newBlockingStub(channel);
     }
 
-    // Obtener crytal para la tarjeta
-    // Nombro el metodo en mayuscula porque en el
-    // fichero proto esta en mayuscula
+    /**
+     * Obtener crystal para la tarjeta
+     */
     Crystal Dispatch(String owner, String cardNumber) {
 
         logger.info("Intentaré reservar Collaxion para " + owner + " ...");

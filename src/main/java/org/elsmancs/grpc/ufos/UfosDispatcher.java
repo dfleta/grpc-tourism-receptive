@@ -16,14 +16,16 @@ public class UfosDispatcher implements GuestDispatcher {
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws Exception {
         
-        // Abrimos canal con el server
+        // Abrimos canal de comunicacion con el server
+        // Los canales son thread-safe and reusable. 
+        // Suelen crearse al principio de la app y reutilizarse
+        // hasta que finaliza la app.
         UfosParkClient ufosClient = UfosParkClient.init();
         // Llamada al gRPC Dispatch Card para reservar un UFO
         Ufo ufo = ufosClient.Dispatch(cardOwner, cardNumber);
 
         // Llamada al gRPC Pay para pagar la reserva
         if (ufo != null  && PaymentClient.execute(cardOwner, cardNumber, ufo.getFee())) {
-            logger.info("Aqui llamo al servicio para confirmar reserva UFO");
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
             System.out.println(ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
         } else {

@@ -23,8 +23,6 @@ public class CrystalDispatcher implements GuestDispatcher {
 
         // Llamada al gRPC Pay para pagar el crystal
         if (crystal != null  && PaymentClient.execute(cardOwner, cardNumber, crystal.getFee())) {
-            // this.flota.put(ufo.getKey(), card.number());
-            logger.info("Llamada al servicio para confirmar unidades");
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
             System.out.println(crystalClient.Confirm(crystal.getUnidades()));
         } else {

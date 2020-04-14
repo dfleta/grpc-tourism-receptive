@@ -46,8 +46,6 @@ public class UfosParkClient {
     }
 
     // Obtener un UFO para la tarjeta
-    // Nombro el metodo en mayuscula porque en el
-    // fichero proto esta en mayuscula
     public Ufo Dispatch(String owner, String cardNumber) {
 
         logger.info("Intentaré reservar un UFO para " + owner + " ...");
@@ -89,6 +87,9 @@ public class UfosParkClient {
     }
 
     void shutDownChannel() throws Exception {
+        // ManagedChannels usan recursos como threads y conexiones TCP. 
+        // Es necesario cerrarlos cuando no vayan a ser usados.
+        // Si va a ser usado de nuevo puede dejarse corriendo.
         channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         logger.info("ManagedChannel de UfosParkClient cerrado");
     } 
@@ -148,9 +149,8 @@ public class UfosParkClient {
         String target = "localhost:50051";
         
         ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
-                // Channels are secure by default (via SSL/TLS). For the example we disable TLS
-                // to avoid
-                // needing certificates.
+                // Los canales son seguros por defecto (via SSL/TLS). 
+                // Deshabilitamos TLS para evitar la necesidad de certificados.
                 .usePlaintext().build();
 
         UfosParkClient ufosParkClient = new UfosParkClient(channel);
