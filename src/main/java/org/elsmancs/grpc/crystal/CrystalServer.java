@@ -94,9 +94,9 @@ public class CrystalServer {
      * Implementacion del servicio UfosPark. Ver fichero ufos_park.proto para
      * detalles.
      */
-    static class CrystalService extends CrystalExpenderGrpc.CrystalExpenderImplBase {
+    public static class CrystalService extends CrystalExpenderGrpc.CrystalExpenderImplBase {
 
-        private final CrystalExpender crystalExpender = new CrystalExpender();
+        private final CrystalDispenser crystalExpender = new CrystalDispenser();
 
         @Override
         public void dispatch(CreditCard request, StreamObserver<org.elsmancs.grpc.Crystal> responseObserver) {

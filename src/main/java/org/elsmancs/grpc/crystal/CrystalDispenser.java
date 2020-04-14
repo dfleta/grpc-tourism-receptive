@@ -1,17 +1,17 @@
 package org.elsmancs.grpc.crystal;
 
 
-class CrystalExpender {
+class CrystalDispenser {
 
     private int stock = 0;
     private double itemCost = 50d;
 
-    CrystalExpender() {
+    CrystalDispenser() {
         this.stock = 100;
         this.itemCost = 50;
     }
 
-    CrystalExpender(int stock, double itemCost) {
+    CrystalDispenser(int stock, double itemCost) {
         this.stock = stock;
         this.itemCost = itemCost;
     }

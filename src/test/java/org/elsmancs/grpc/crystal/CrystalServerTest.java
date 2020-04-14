@@ -23,7 +23,7 @@ import io.grpc.testing.GrpcCleanupRule;
 @RunWith(JUnit4.class)
 public class CrystalServerTest {
 
-        /**
+    /**
      * From grpc documentation examples:
      * "This rule manages automatic graceful shutdown for the registered servers and
      * channels at the end of test.

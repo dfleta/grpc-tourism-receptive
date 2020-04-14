@@ -107,14 +107,14 @@ task PaymentClient(type: CreateStartScripts) {
 
 task CrystalServer(type: CreateStartScripts) {
     mainClassName = 'org.elsmancs.grpc.crystal.CrystalServer'
-    applicationName = 'crystal-expender-server'
+    applicationName = 'crystal-dispenser-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task CrystalClient(type: CreateStartScripts) {
     mainClassName = 'org.elsmancs.grpc.crystal.CrystalClient'
-    applicationName = 'crystal-expender-client'
+    applicationName = 'crystal-dispenser-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
