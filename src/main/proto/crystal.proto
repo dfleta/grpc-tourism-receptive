@@ -1,5 +1,6 @@
 /**
- * instalar extension vscode-proto3
+ * RPC for Crytal Dispenser service
+ * and message structured data
  */
 
 syntax = "proto3";
@@ -7,37 +8,34 @@ syntax = "proto3";
 import "payment.proto";
 
 option java_multiple_files = true;
-option java_package = "org.elsmancs.grpc"; // dara problemas
+option java_package = "org.elsmancs.grpc";
 option java_outer_classname = "CrystalExpenderProto";
 option objc_class_prefix = "KRP";
  
-/* 
-   You can add an optional package specifier to a .proto file 
-   to prevent name clashes between protocol message types.
-   Sirve para importar estos mensajes a otros ficheros proto.
-   */
+/**
+ * Package specifier to a .proto file 
+ * to prevent name clashes between protocol message types.
+ */
 package crystal.expender;
  
-// Interfaz exportada por el servidor
+// Server exported interface
  
 service CrystalExpender {
-    // Un RPC simple.
-    //
-    // Asigna unidades de crystal de Collaxion 
-    // a una tarjeta de credito dada.
-    //
-    // Devuelve 0 si alguna 
-    // de las condiciones de reserva fallan.
- 
+
+    // RPC.
+    // Dispatch: find available kalaxian crystal units 
+    // Confirm: dispenses crystal
+    // Credit Card message imported from payment.proto
+    // Processed message imported from payment.proto
+
     rpc Dispatch (payment.CreditCard) returns (Crystal) {}
     rpc Confirm (Crystal) returns (payment.Processed) {}  
 }
-   
  
-// Unidades de crystal reservadas para esa tarjeta de crédito
+// Kalaxian crystal units dispensed for a credit card
 message Crystal {  
-    // unidades de crystal
+    // crystal units
     int32 unidades = 1;
-    // coste del crystal
+    // crystal price
     double fee = 2;
 }

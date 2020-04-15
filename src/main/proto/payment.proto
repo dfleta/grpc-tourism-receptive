@@ -1,3 +1,8 @@
+/**
+ * RPC for Payment service
+ * and message structured data
+ */
+
 syntax = "proto3";
 
 option java_multiple_files = true;
@@ -7,29 +12,30 @@ option objc_class_prefix = "PAY";
 
 package payment;
  
-// Interfaz exportada por el servidor
+// Server exported interface
  
 service Payment {
-    // Un RPC simple.
-    // Procesa un cargo a la tarjeta de credito dada.
-    // Devuelve boolean indicando si se ha procesado el pago.
+    
+    // RPC:
+    // Charges the credit card.
+    // Returns boolean if card is charged.
  
     rpc Pay (CreditCard) returns (Processed) {}
-   
 }
    
-// Tarjeta de crédito
+// Message: credit card
 message CreditCard {
-    // propietario de la tarjeta
+    // card owner
     string owner = 1;
-    // numero de la tarjeta
+    // card number
     string number = 2;
+    // charge fee
     double charge = 3;
 }
    
-// Pago autorizado
+// Authorised charge
 message Processed {  
-    // Si hay credito disponible se procesa
+    // Charge processed or not
     bool isProcessed = 1;
 }
  
