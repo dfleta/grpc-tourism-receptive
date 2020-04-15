@@ -40,11 +40,6 @@ public class CrystalServer {
 
     void start() throws IOException {
 
-        /* The port on which the server should run */
-        // int port = 50071;
-        // server = ServerBuilder.forPort(port).addService(new
-        // CrystalService()).build().start();
-
         this.server.start();
 
         logger.info("Server started, listening on " + port);
@@ -91,8 +86,8 @@ public class CrystalServer {
     }
 
     /**
-     * Implementacion del servicio UfosPark. Ver fichero ufos_park.proto para
-     * detalles.
+     * CrystalDispenser service implementation. 
+     * See crystal.proto for details.
      */
     public static class CrystalService extends CrystalExpenderGrpc.CrystalExpenderImplBase {
 
@@ -101,10 +96,9 @@ public class CrystalServer {
         @Override
         public void dispatch(CreditCard request, StreamObserver<org.elsmancs.grpc.Crystal> responseObserver) {
 
-            int unidades = crystalExpender.dispatch(request.getNumber());
-            // Como construir un mensaje con varias propiedades:
-            // method chaining
-            Crystal reply = Crystal.newBuilder().setUnidades(unidades).setFee(crystalExpender.fee()).build();
+            int units = crystalExpender.dispatch(request.getNumber());
+            
+            Crystal reply = Crystal.newBuilder().setUnidades(units).setFee(crystalExpender.fee()).build();
             // return Collaxion units
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.

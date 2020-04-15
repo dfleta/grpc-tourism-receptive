@@ -16,21 +16,21 @@ public class CrystalDispatcher implements GuestDispatcher {
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws Exception {
                
-        // Abrimos canal con el server
+        // Open channel with the server
         CrystalClient crystalClient = CrystalClient.init();
-        // Llamada al gRPC Dispatch Card para reservar Crystal
+        // Call the gRPC Dispatch to order Crystal
         Crystal crystal = crystalClient.Dispatch(cardOwner, cardNumber);
 
-        // Llamada al gRPC Pay para pagar el crystal
+        // Call the gRPC Pay to pay for the crystal
         if (crystal != null  && PaymentClient.execute(cardOwner, cardNumber, crystal.getFee())) {
-            // Llamada al gRPC para confirmar ese UFO a esa tarjeta
+            // Call the gRPC to confirm crystal units
             System.out.println(crystalClient.Confirm(crystal.getUnidades()));
         } else {
-            logger.info("No hay crystal o credito");
+            logger.info("No available crytal or no credit");
         }
 
-        // El canal se reutiliza entre llamadas al server
-        // Cerrarlo al terminar
+        // The channel is reused between server calls.
+        // Close it when the app finish.
         crystalClient.shutDownChannel();
     }
 }

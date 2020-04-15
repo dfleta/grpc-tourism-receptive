@@ -19,7 +19,7 @@ import org.elsmancs.grpc.CrystalExpenderGrpc;
 import org.elsmancs.grpc.Processed;
 
 /**
- * A simple client that requests Collaxion crytal from the {@link CrystalServer}.
+ * A simple client that requests Kalaxian crytal from the {@link CrystalServer}.
  */
 public class CrystalClient {
 
@@ -36,6 +36,7 @@ public class CrystalClient {
      */
     public CrystalClient(Channel channel) {
 
+        // gRPC examples comments:
         // 'channel' here is a Channel, not a ManagedChannel,
         // so it is not this code's responsibility to
         // shut it down.
@@ -46,11 +47,11 @@ public class CrystalClient {
     }
 
     /**
-     * Obtener crystal para la tarjeta
+     * Find available crystal for a credit card
      */
     Crystal Dispatch(String owner, String cardNumber) {
 
-        logger.info("Intentaré reservar Collaxion para " + owner + " ...");
+        logger.info("Checking avalible Kalaxian Crystal for " + owner + " ...");
 
         CreditCard request = CreditCard.newBuilder()
                                         .setOwner(owner)
@@ -63,14 +64,16 @@ public class CrystalClient {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return null;
         }
-        logger.info(response.getUnidades() + " unidades de Collaxion reservado para " + request.getOwner() + ": " + request.getNumber());
+        logger.info(response.getUnidades() + " units of Kalaxian Crystal avaliable for " + request.getOwner() + ": " + request.getNumber());
         return response;
     }
 
-    // Confirmar el crystal para la tarjeta
+    /**
+     * Find available crystal for a credit card
+     */
     boolean Confirm(int unidades) {
 
-        logger.info("Intentando confirmar " + unidades + " unidades de crystal" + " ...");
+        logger.info("Dispensing " + unidades + " crystal units" + " ...");
 
         Crystal request = Crystal.newBuilder()
                             .setUnidades(unidades)
@@ -83,18 +86,20 @@ public class CrystalClient {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return false;
         }
-        logger.info(unidades + " Crystal confirmado " + response.getIsProcessed());
+        logger.info(unidades + " crystal units dispensed " + response.getIsProcessed());
         return response.getIsProcessed();
     }
 
-
+    /**
+     * Setup the client
+     */
     static CrystalClient init() {
         
         String target = "localhost:50071";
         
         ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
-                // Channels are secure by default (via SSL/TLS). For the example we disable TLS
-                // to avoid
+                // Channels are secure by default (via SSL/TLS). 
+                // For the example we disable TLS to avoid
                 // needing certificates.
                 .usePlaintext().build();
 
@@ -109,7 +114,7 @@ public class CrystalClient {
 
     void shutDownChannel() throws Exception {
         channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        logger.info("ManagedChannel de CrystalClient cerrado");
+        logger.info("ManagedChannel CrystalClient closed");
     }
 
 
@@ -126,9 +131,9 @@ public class CrystalClient {
             if ("--help".equals(args[0])) {
                 System.err.println("Usage: [owner card [target]]");
                 System.err.println("");
-                System.err.println("  owner   La persona que quiere reservar ek UFO. Por defecto " + user);
-                System.err.println("  card    El numero de la tarjeta a la que realizar el cargo. Por defecto " + card);
-                System.err.println("  target  El servidor al que conectar. Por defecto " + target);
+                System.err.println("  owner   Person who pays for the crystal. Default " + user);
+                System.err.println("  card    Card number to pay for the crstal. Default " + card);
+                System.err.println("  target  Server to connect to. Default " + target);
                 System.exit(1);
             }
             user = args[0];
@@ -138,6 +143,7 @@ public class CrystalClient {
             target = args[2];
         }
 
+        // gRPC examples comments:
         // Create a communication channel to the server, known as a Channel. Channels
         // are thread-safe
         // and reusable. It is common to create channels at the beginning of your

@@ -119,7 +119,7 @@ public class UfosParkClient {
         // Es necesario cerrarlos cuando no vayan a ser usados.
         // Si va a ser usado de nuevo puede dejarse corriendo.
         channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        logger.info("ManagedChannel de UfosParkClient cerrado");
+        logger.info("ManagedChannel UfosParkClient closed");
     }
 
     /**

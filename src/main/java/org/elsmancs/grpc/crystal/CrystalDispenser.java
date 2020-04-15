@@ -1,3 +1,8 @@
+/**
+ * Business logic and data repo 
+ * for the Crystal Dispenser service
+ */
+
 package org.elsmancs.grpc.crystal;
 
 
@@ -16,6 +21,8 @@ class CrystalDispenser {
         this.itemCost = itemCost;
     }
 
+    // future implement of crystal repo
+    // cardNumber needed then 
     int dispatch(String cardNumber) {
         return (this.stock > 0)? 1: 0;
     }
