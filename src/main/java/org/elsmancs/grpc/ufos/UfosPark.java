@@ -1,3 +1,7 @@
+/**
+ * Business logic and data repo 
+ * for the UFOs service
+ */
 package org.elsmancs.grpc.ufos;
 
 import java.util.Arrays;
@@ -11,7 +15,7 @@ import com.google.common.annotations.VisibleForTesting;
 class UfosPark {
 
     private final double fee = 2500d;
-    private final Map<String, String> flota = new HashMap<String, String>();
+    private final Map<String, String> fleet = new HashMap<String, String>();
     
     UfosPark() {
         init();
@@ -19,13 +23,13 @@ class UfosPark {
 
     private void init() {
         String[] ufosID = { "unx", "dox", "trex" };
-		for (String ovni : ufosID) {
-			this.add(ovni);
+		for (String ufo : ufosID) {
+			this.add(ufo);
         }
     }
 
     void add(String ufoID) {
-        flota.putIfAbsent(ufoID, null);
+        fleet.putIfAbsent(ufoID, null);
     }
 
     double fee() {
@@ -36,28 +40,22 @@ class UfosPark {
 
         String ufoID = null;
 
-        if (!flota.containsValue(cardNumber)) {
-            for (Map.Entry<String, String> entry : this.flota.entrySet()) {
+        if (!fleet.containsValue(cardNumber)) {
+            for (Map.Entry<String, String> entry : this.fleet.entrySet()) {
                 if (entry.getValue() == null) {
                     ufoID = entry.getKey();
-                    // this.flota.put(ufoID, card.getNumber());
                     return ufoID;
                 }
             }
         }
 
         return "no ufo reserved";
-        
-        //if (ufo != null  && card.pay(fee)) {
-          //  this.flota.put(ufo.getKey(), card.number());
-        //}
     }
     
-    // implementar algoritmo ufo blocked
-    // por eso dejo el return true
+    // Implementar algoritmo ufo blocked
     boolean assignUfo(String ufoID, String cardNumber) {
-        if (flota.containsKey(ufoID)) {
-            this.flota.put(ufoID, cardNumber);
+        if (fleet.containsKey(ufoID)) {
+            this.fleet.put(ufoID, cardNumber);
             return true;
         } else {
             return false;
@@ -66,8 +64,8 @@ class UfosPark {
 
     String getUfoOf(String cardNumber) {
         String ufoID = null;
-        if (this.flota.containsValue(cardNumber)) {
-            for (Map.Entry<String, String> entry: this.flota.entrySet()) {
+        if (this.fleet.containsValue(cardNumber)) {
+            for (Map.Entry<String, String> entry: this.fleet.entrySet()) {
                 if (entry.getValue() == cardNumber) {
                     ufoID = entry.getKey();
                     break;
@@ -79,7 +77,7 @@ class UfosPark {
 
     @Override
     public String toString() {
-        String[] ufosID = this.flota.keySet().toArray(new String[flota.size()]);
+        String[] ufosID = this.fleet.keySet().toArray(new String[fleet.size()]);
         Arrays.sort(ufosID);
         return List.of(ufosID).toString();
     }
@@ -90,11 +88,11 @@ class UfosPark {
 
     @VisibleForTesting
     boolean containsCard(String cardNumber) {
-        return this.flota.containsValue(cardNumber);
+        return this.fleet.containsValue(cardNumber);
     }
 
     @VisibleForTesting
     Collection<String> cardNumbers() {
-        return this.flota.values();
+        return this.fleet.values();
     }
 } 

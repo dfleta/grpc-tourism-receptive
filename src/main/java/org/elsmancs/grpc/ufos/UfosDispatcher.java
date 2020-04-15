@@ -21,6 +21,7 @@ public class UfosDispatcher implements GuestDispatcher {
         // Suelen crearse al principio de la app y reutilizarse
         // hasta que finaliza la app.
         UfosParkClient ufosClient = UfosParkClient.init();
+
         // Llamada al gRPC Dispatch Card para reservar un UFO
         Ufo ufo = ufosClient.Dispatch(cardOwner, cardNumber);
 
@@ -29,7 +30,7 @@ public class UfosDispatcher implements GuestDispatcher {
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
             System.out.println(ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
         } else {
-            logger.info("No hay UFO o credito");
+            logger.info("No UFO available or no credit");
         }
 
         // El canal se reutiliza entre llamadas al server

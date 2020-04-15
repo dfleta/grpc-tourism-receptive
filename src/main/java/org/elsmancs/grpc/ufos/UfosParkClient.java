@@ -36,6 +36,7 @@ public class UfosParkClient {
      */
     public UfosParkClient(Channel channel) {
 
+        // gRPC example comments: 
         // 'channel' here is a Channel, not a ManagedChannel,
         // so it is not this code's responsibility to
         // shut it down.
@@ -45,10 +46,12 @@ public class UfosParkClient {
         blockingStub = UfosParkGrpc.newBlockingStub(channel);
     }
 
-    // Obtener un UFO para la tarjeta
+    /**
+     * Get an avaliable UFO for the card. 
+     */
     public Ufo Dispatch(String owner, String cardNumber) {
 
-        logger.info("Intentaré reservar un UFO para " + owner + " ...");
+        logger.info("Dispatching an UFO to " + owner + " ...");
 
         CreditCard request = CreditCard.newBuilder()
                                         .setOwner(owner)
@@ -61,14 +64,16 @@ public class UfosParkClient {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return null;
         }
-        logger.info("Ufo reservado para " + response.getCardNumber() + ": " + response.getId());
+        logger.info("Ufo reserved for " + response.getCardNumber() + ": " + response.getId());
         return response;
     }
 
-    // Confirmar el UFO para la tarjeta
+    /**
+     * Confirm the UFO for the card.
+     */ 
     public boolean AssignUfo(String ufoID, String cardNumber) {
 
-        logger.info("Intentare confirmar el UFO " + ufoID + " para " + cardNumber + " ...");
+        logger.info("Confirming UFO " + ufoID + " for " + cardNumber + " ...");
 
         Ufo request = Ufo.newBuilder()
                             .setId(ufoID)
@@ -82,68 +87,13 @@ public class UfosParkClient {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return false;
         }
-        logger.info("Ufo confirmado " + response.getIsProcessed());
+        logger.info("Ufo confirmed " + response.getIsProcessed());
         return response.getIsProcessed();
     }
 
-    void shutDownChannel() throws Exception {
-        // ManagedChannels usan recursos como threads y conexiones TCP. 
-        // Es necesario cerrarlos cuando no vayan a ser usados.
-        // Si va a ser usado de nuevo puede dejarse corriendo.
-        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        logger.info("ManagedChannel de UfosParkClient cerrado");
-    } 
-
     /**
-     * Main method to run the client as standalone app.
+     * Setup the client
      */
-    public static void main(String[] args) throws Exception {
-        String user = "Rick";
-        String card = "123456789";
-        // Access a service running on the local machine on port 50051
-        String target = "localhost:50051";
-        // Allow passing in the user and target strings as command line arguments
-        if (args.length > 0) {
-            if ("--help".equals(args[0])) {
-                System.err.println("Usage: [owner card [target]]");
-                System.err.println("");
-                System.err.println("  owner   La persona que quiere reservar ek UFO. Por defecto " + user);
-                System.err.println("  card    El numero de la tarjeta a la que realizar el cargo. Por defecto " + card);
-                System.err.println("  target  El servidor al que conectar. Por defecto " + target);
-                System.exit(1);
-            }
-            user = args[0];
-            card = args[1];
-        }
-        if (args.length > 2) {
-            target = args[2];
-        }
-
-        // Create a communication channel to the server, known as a Channel. Channels
-        // are thread-safe
-        // and reusable. It is common to create channels at the beginning of your
-        // application and reuse
-        // them until the application shuts down.
-        ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
-                // Channels are secure by default (via SSL/TLS). For the example we disable TLS
-                // to avoid
-                // needing certificates.
-                .usePlaintext().build();
-
-        try {
-            UfosParkClient client = new UfosParkClient(channel);
-            client.Dispatch(user, card);
-        } finally {
-            // ManagedChannels use resources like threads and TCP connections. To prevent
-            // leaking these
-            // resources the channel should be shut down when it will no longer be used. If
-            // it may be used
-            // again leave it running.
-            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        }
-    }
-
-
     static UfosParkClient init() {
         
         String target = "localhost:50051";
@@ -158,7 +108,63 @@ public class UfosParkClient {
         return ufosParkClient;
     }
 
+
     private void setChannel(ManagedChannel channel) {
         this.channel = channel;
+    }    
+
+
+    void shutDownChannel() throws Exception {
+        // ManagedChannels usan recursos como threads y conexiones TCP. 
+        // Es necesario cerrarlos cuando no vayan a ser usados.
+        // Si va a ser usado de nuevo puede dejarse corriendo.
+        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        logger.info("ManagedChannel de UfosParkClient cerrado");
+    }
+
+    /**
+     * Main method to run the client as a standalone app.
+     */
+    public static void main(String[] args) throws Exception {
+        String user = "Rick";
+        String card = "123456789";
+        // Access a service running on the local machine on port 50051
+        String target = "localhost:50051";
+        // Allow passing in the user and target strings as command line arguments
+        if (args.length > 0) {
+            if ("--help".equals(args[0])) {
+                System.err.println("Usage: [owner card [target]]");
+                System.err.println("");
+                System.err.println("  owner   Person who books the UFO. Default " + user);
+                System.err.println("  card    Card number to pay for the UFO. Default " + card);
+                System.err.println("  target  Server to connect to. Default " + target);
+                System.exit(1);
+            }
+            user = args[0];
+            card = args[1];
+        }
+        if (args.length > 2) {
+            target = args[2];
+        }
+
+        // gRPC examples comments:
+        // Crear un canal de comunicacion con el servidor, llamado Channel. 
+        // Channels are thread-safe and reusable. It is common to create channels 
+        // at the beginning of your application and reuse
+        // them until the application shuts down.
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
+                // Los canales son seguros por defecto (via SSL/TLS). 
+                // Deshabilitamos TLS para evitar la necesidad de certificados.
+                .usePlaintext().build();
+
+        try {
+            UfosParkClient client = new UfosParkClient(channel);
+            client.Dispatch(user, card);
+        } finally {
+            // ManagedChannels usan recursos como threads y conexiones TCP. 
+            // Es necesario cerrarlos cuando no vayan a ser usados.
+            // Si va a ser usado de nuevo puede dejarse corriendo.
+            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        }
     }    
 }

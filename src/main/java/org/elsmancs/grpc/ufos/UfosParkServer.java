@@ -41,10 +41,6 @@ public class UfosParkServer {
 
     public void start() throws IOException {
 
-        /* The port on which the server should run */
-        //int port = 50051;
-        // server = ServerBuilder.forPort(port).addService(new UfosParkService()).build().start();
-
         server.start();
 
         logger.info("Server started, listening on " + port);
@@ -91,8 +87,8 @@ public class UfosParkServer {
     }
 
     /**
-     * Implementacion del servicio UfosPark. Ver fichero ufos_park.proto para
-     * detalles.
+     * UfosPark service implementation. 
+     * See ufos_park.proto for details.
      */
     static class UfosParkService extends UfosParkGrpc.UfosParkImplBase {
 
@@ -102,10 +98,9 @@ public class UfosParkServer {
         public void dispatch(CreditCard request, StreamObserver<org.elsmancs.grpc.Ufo> responseObserver) {
 
             String ufoID = ufosPark.reserveUfo(request.getNumber());
-            // Como construir un mensaje con varias propiedades:
-            // method chaining
+            // Method chaining
             Ufo reply = Ufo.newBuilder().setId(ufoID).setCardNumber(request.getNumber()).setFee(ufosPark.fee()).build();
-            // return the Ufo
+            // Return the Ufo
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();
@@ -115,8 +110,7 @@ public class UfosParkServer {
         public void assignUfo(Ufo request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
 
             boolean isAssigned = ufosPark.assignUfo(request.getId(), request.getCardNumber());
-            // Como construir un mensaje con varias propiedades:
-            // method chaining
+
             Processed reply = Processed.newBuilder().setIsProcessed(isAssigned).build();
             // return the Ufo
             responseObserver.onNext(reply);
