@@ -7,10 +7,10 @@ public class App {
     
     public static void main(String[] args) throws Exception {
 
-        Receptivo receptivo = new Receptivo();
+        Receptive receptive = new Receptive();
 
-        receptivo.registra(new UfosDispatcher());
-        receptivo.registra(new CrystalDispatcher());
+        receptive.register(new UfosDispatcher());
+        receptive.register(new CrystalDispatcher());
 
         String cardOwner = "Rick";
         String cardNumber = "123456789";
@@ -19,14 +19,14 @@ public class App {
             if ("--help".equals(args[0])) {
                 System.err.println("Usage: [owner card [target]]");
                 System.err.println("");
-                System.err.println("  owner   La persona que quiere reservar el UFO.");
-                System.err.println("  card    El numero de la tarjeta a la que realizar el cargo.");
+                System.err.println("  owner   Guest to charge for the services. Default " + cardOwner);
+                System.err.println("  card    Card number to charge for. Default " + cardNumber);
                 System.exit(1);
             }                               
             cardOwner = args[0];
             cardNumber = args[1];
         }
 
-        receptivo.dispatch(cardOwner, cardNumber);
+        receptive.dispatch(cardOwner, cardNumber);
     }
 }

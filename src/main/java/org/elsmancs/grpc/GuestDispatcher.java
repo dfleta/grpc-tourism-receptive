@@ -1,3 +1,7 @@
+/**
+ * Observer pattern interface
+ */
+
 package org.elsmancs.grpc;
 
 public interface GuestDispatcher {
