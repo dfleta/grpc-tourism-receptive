@@ -32,8 +32,12 @@ public class UfosParkServer {
         server = ServerBuilder.forPort(port)
                                 .addService(new UfosParkService())
                                 .build();
-    };
+    }
 
+    /** 
+     * These constructor has been added for testing purposes.
+     * Create a UfosPark server using serverBuilder as a base.
+     */
     public UfosParkServer(ServerBuilder<?> serverBuilder, int port) {
         this.server =  serverBuilder.addService(new UfosParkService()).build();
         this.port = port;
@@ -100,7 +104,7 @@ public class UfosParkServer {
             String ufoID = ufosPark.reserveUfo(request.getNumber());
             // Method chaining
             Ufo reply = Ufo.newBuilder().setId(ufoID).setCardNumber(request.getNumber()).setFee(ufosPark.fee()).build();
-            // Return the Ufo
+            // Return the UFO message
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();
@@ -112,7 +116,7 @@ public class UfosParkServer {
             boolean isAssigned = ufosPark.assignUfo(request.getId(), request.getCardNumber());
 
             Processed reply = Processed.newBuilder().setIsProcessed(isAssigned).build();
-            // return the Ufo
+            // return the Processed message
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();

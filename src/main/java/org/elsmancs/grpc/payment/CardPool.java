@@ -1,3 +1,8 @@
+/**
+ * Payment service
+ * business logic and data repo
+ */
+
 package org.elsmancs.grpc.payment;
 
 import java.util.HashMap;
@@ -25,9 +30,10 @@ class CardPool {
     }
 
     boolean pay(CreditCard card) {
-        double credit = this.credit(card);
-        if (card.getCharge() <= credit) {
-            this.cardsPool.put(card.getNumber(), credit -= card.getCharge());
+        double availableCredit = this.credit(card);
+        if (card.getCharge() <= availableCredit) {
+            availableCredit -= card.getCharge();
+            this.cardsPool.put(card.getNumber(), availableCredit);
             return true;
         } else {
             return false;

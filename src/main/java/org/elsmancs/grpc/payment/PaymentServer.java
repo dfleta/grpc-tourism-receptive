@@ -28,7 +28,6 @@ public class PaymentServer {
     private int port;
 
     public PaymentServer() {
-        // The port on which the server should run
         this.port = 50061;
         server = ServerBuilder.forPort(port)
                                 .addService(new PaymentService())
@@ -36,8 +35,8 @@ public class PaymentServer {
     };
 
     /** 
-     * Este constructor lo he incluido para propositos de testing:
-     * Create a Payment server using serverBuilder as a base
+     * These constructor has been added for testing purposes.
+     * Create a Payment server using serverBuilder as a base.
      */
     public PaymentServer(ServerBuilder<?> serverBuilder, int port) {
         this.server =  serverBuilder.addService(new PaymentService()).build();
@@ -48,7 +47,7 @@ public class PaymentServer {
 
         server.start();
 
-        logger.info("Servidor Payment iniciado, escuchando en " + port);
+        logger.info("Server started, listening on " + port);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -92,8 +91,8 @@ public class PaymentServer {
     }
 
     /**
-     * Implementacion del servicio PaymentService. 
-     * Ver fichero payment.proto para detalles.
+     * Payment service implementation. 
+     * See payment.proto file for details.
      */
     static class PaymentService extends PaymentGrpc.PaymentImplBase {
 
@@ -106,10 +105,8 @@ public class PaymentServer {
 
             boolean isAuthorised = cardsPool.pay(request);
 
-            // Construir el mensaje Processed
-            // method chaining
+            // Message Processed
             Processed reply = Processed.newBuilder().setIsProcessed(isAuthorised).build();
-            // devolver el mensaje Processed
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();

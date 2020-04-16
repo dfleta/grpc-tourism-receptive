@@ -32,6 +32,10 @@ public class CrystalServer {
         this.server = ServerBuilder.forPort(port).addService(new CrystalService()).build();
     }
 
+    /** 
+     * These constructor has been added for testing purposes.
+     * Create a Crytal server using serverBuilder as a base.
+     */
     public CrystalServer(ServerBuilder<?> serverBuilder, int port) {
         this.server = serverBuilder.addService(new CrystalService()).build();
         this.port = port;
@@ -99,7 +103,7 @@ public class CrystalServer {
             int units = crystalExpender.dispatch(request.getNumber());
             
             Crystal reply = Crystal.newBuilder().setUnidades(units).setFee(crystalExpender.fee()).build();
-            // return Collaxion units
+            // return the Crystal message
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();
@@ -109,10 +113,9 @@ public class CrystalServer {
         public void confirm(Crystal request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
 
             boolean isConfirmed = crystalExpender.confirm(request.getUnidades());
-            // Como construir un mensaje con varias propiedades:
-            // method chaining
+
             Processed reply = Processed.newBuilder().setIsProcessed(isConfirmed).build();
-            // return the Ufo
+            // return the Processed message
             responseObserver.onNext(reply);
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();

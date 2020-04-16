@@ -1,6 +1,6 @@
 /**
- * Business logic and data repo 
- * for the UFOs service
+ * UFOs service
+ * business logic and data repo 
  */
 package org.elsmancs.grpc.ufos;
 
