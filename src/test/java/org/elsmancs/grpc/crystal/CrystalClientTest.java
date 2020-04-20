@@ -1,3 +1,8 @@
+/**
+ * Testing the client of the
+ * crystal dispenser service. 
+ */
+
 package org.elsmancs.grpc.crystal;
 
 import static org.junit.Assert.assertEquals;
@@ -26,6 +31,10 @@ import io.grpc.util.MutableHandlerRegistry;
 @RunWith(JUnit4.class)
 public class CrystalClientTest {
     /**
+     * Test classes uses a specific grpc Junit rule for testing
+     * clients and servers. See grpc documentation.
+     * 
+     * grpc documentation comments:
      * This rule manages automatic graceful shutdown for the registered server at
      * the end of test.
      */
@@ -39,9 +48,11 @@ public class CrystalClientTest {
     @Before
     public void setUp() throws Exception {
 
+        // grpc documentation comments:
         // Generate a unique in-process server name.
         String serverName = InProcessServerBuilder.generateName();
 
+        // grpc documentation comments:
         // Use a mutable service registry for later registering the service
         // implementation
         // for each test case.
@@ -54,23 +65,23 @@ public class CrystalClientTest {
     }
 
     /**
-     * Test del servicio dispatch
+     * dispatch service testing
      */
     @Test
     public void dispatch_test() {
 
-        // Mensaje CreditCard al servicio
+        // request CreditCard message
         CreditCard requestCard = CreditCard.newBuilder().setOwner("Rick").setNumber("1111").build();
         final AtomicReference<CreditCard> cardDelivered = new AtomicReference<CreditCard>();
 
-        // Mock de la respuesta /mensaje Crystal del servicio
+        // Mocking the service reply /message Crystal
         Crystal responseCrystal = Crystal.newBuilder().setUnidades(1).setFee(50).build();
 
-        // implement the fake service
+        // Implementing the fake service
         CrystalExpenderImplBase dispatchImpl = new CrystalExpenderImplBase() {
             @Override
             public void dispatch(CreditCard card, StreamObserver<Crystal> responseObserver) {
-                // para chequear que la construccion de la Card en el client se realiza OK
+                // Checking the CreditCard message construction at the client
                 cardDelivered.set(card);
                 responseObserver.onNext(responseCrystal);
                 responseObserver.onCompleted();
@@ -86,21 +97,24 @@ public class CrystalClientTest {
         assertEquals(responseCrystal.getFee(), crystalDelivered.getFee(), 0.1);
     }
 
+    /**
+     * dispatch service returns an error
+     */
     @Test
     public void dispatch_error_test() {
 
-        // Mensaje CreditCard al servicio
+        // request message CreditCard
         CreditCard requestCard = CreditCard.newBuilder().setOwner("Rick").setNumber("1111").build();
         final AtomicReference<CreditCard> cardDelivered = new AtomicReference<CreditCard>();
 
-        // Si el servidor responde con un error, el cliente devuelve false
+        // If the server responses an error, the client returns false
         final StatusRuntimeException fakeError = new StatusRuntimeException(io.grpc.Status.DATA_LOSS);
 
-        // implement the fake service
+        // Implementing the fake service
         CrystalExpenderImplBase dispatchImpl = new CrystalExpenderImplBase() {
             @Override
             public void dispatch(CreditCard card, StreamObserver<Crystal> responseObserver) {
-                // para chequear que la construccion de la Card en el client se realiza OK
+                // Checking the CreditCard message construction at the client
                 cardDelivered.set(card);
                 responseObserver.onError(fakeError);
             }
@@ -114,25 +128,26 @@ public class CrystalClientTest {
         assertNull(crystalDelivered);
     }
 
+    /**
+     * confirm service testing
+     */
     @Test
     public void confirm_test() {
 
-        // Mensaje Crystal al servicio
+        // request message Crystal
         Crystal request = Crystal.newBuilder().setUnidades(1).build();
         AtomicReference<Crystal> crystalDelivered = new AtomicReference<Crystal>();
 
-        // Mock de la respuesta /mensaje Processed del servicio
+        // Mocking the service reply /message Processed
         Processed responseProcessed = Processed.newBuilder().setIsProcessed(true).build();
 
-        // fake service
+        // Fake service
         CrystalExpenderImplBase confirmImpl = new CrystalExpenderImplBase() {
             @Override
             public void confirm(Crystal request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
-                // para chequear que la construccion del Ufo en el client se realiza OK
+                // UFO message construction
                 crystalDelivered.set(request);
-                // return the Ufo
                 responseObserver.onNext(responseProcessed);
-                // Specify that we’ve finished dealing with the RPC.
                 responseObserver.onCompleted();
             }
         };
@@ -145,23 +160,24 @@ public class CrystalClientTest {
         assertEquals(responseProcessed.getIsProcessed(), processedDelivered);
     }
 
+    /**
+     * confirm service returns an error
+     */
     @Test
     public void confirm_error_test() {
 
-        // Mensaje Crystal al servicio
+        // request message Crystal
         Crystal requestCrytal = Crystal.newBuilder().setUnidades(1).build();
         AtomicReference<Crystal> crystalDelivered = new AtomicReference<Crystal>();
 
-        // Si el servidor responde con un error, el cliente devuelve false
+        // If the server responses an error, the client returns false
         final StatusRuntimeException fakeError = new StatusRuntimeException(io.grpc.Status.DATA_LOSS);
 
-        // fake service
+        // Fake service
         CrystalExpenderImplBase confirmImpl = new CrystalExpenderImplBase() {
             @Override
             public void confirm(Crystal request, StreamObserver<org.elsmancs.grpc.Processed> responseObserver) {
-                // para chequear que la construccion del Ufo en el client se realiza OK
                 crystalDelivered.set(request);
-                // return the Ufo
                 responseObserver.onError(fakeError);;
             }
         };

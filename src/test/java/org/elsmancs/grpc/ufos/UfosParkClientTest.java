@@ -1,3 +1,8 @@
+/**
+ * Testing the client of the
+ * Ufos Park service. 
+ */
+
 package org.elsmancs.grpc.ufos;
 
 import static org.junit.Assert.assertEquals;

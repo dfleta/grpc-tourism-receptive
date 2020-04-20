@@ -1,3 +1,8 @@
+/**
+ * Testing the client of the
+ * Payment service. 
+ */
+
 package org.elsmancs.grpc.payment;
 
 import static org.junit.Assert.assertEquals;
@@ -32,11 +37,12 @@ public class PaymentClientTest {
      * 
      * https://junit.org/junit4/javadoc/4.12/org/junit/rules/TestRule.html
      * 
-     * @Rule anota reglas a nivel de método A rule is an alteration in how a test
-     *       method, or set of test methods, is run and reported. Similar a before.
-     *       etc pero más flexible.
+     * @Rule anota reglas a nivel de método 
+     * A rule is an alteration in how a test
+     * method, or set of test methods, is run and reported. Similar a before
+     * etc pero más flexible.
      * 
-     *       Esta regla crea un grpcCleanup antes de la ejecución de cada test. *
+     * Esta regla crea un grpcCleanup antes de la ejecución de cada test. *
      */
     @Rule
     public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
@@ -51,7 +57,7 @@ public class PaymentClientTest {
      * 
      * Podemos hacerlo de este modo porque PaymentService solo tiene un servicio:
      * pay()
-     * Si tuviese más que uno => mockearlo en cada metodo: ver UfosParkClient Tests
+     * Si tuviese más de uno => mockearlo en cada metodo: ver UfosParkClient Tests
      */
     private final PaymentGrpc.PaymentImplBase serviceImpl = mock(PaymentGrpc.PaymentImplBase.class, delegatesTo(
         

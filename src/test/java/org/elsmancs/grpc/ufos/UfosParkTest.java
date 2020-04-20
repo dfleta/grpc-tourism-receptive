@@ -1,3 +1,8 @@
+/**
+ * Service Ufos Park
+ * business logic and data repo testing
+ */
+
 package org.elsmancs.grpc.ufos;
 
 import org.junit.Test;
@@ -12,7 +17,7 @@ import org.junit.Before;
 public class UfosParkTest {
 
     UfosPark ufos = null;
-    String[] ovnis = { "unx", "dox", "trex" };
+    final String[] ovnis = { "unx", "dox", "trex" };
 
     @Before
     public void setupUfosPark() {

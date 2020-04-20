@@ -1,3 +1,9 @@
+/**
+ * Server Ufos Park logic testing.
+ * Integration with service Ufos Park 
+ * business logic and data repo.
+ */
+
 package org.elsmancs.grpc.ufos;
 
 import static org.junit.Assert.assertEquals;

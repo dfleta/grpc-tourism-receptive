@@ -1,3 +1,8 @@
+/**
+ * Service Crystal Dispenser
+ * business logic and data repo testing
+ */
+
 package org.elsmancs.grpc.crystal;
 
 import org.junit.Test;
@@ -29,7 +34,7 @@ public class CrystalDispenserTest {
     }
 
     /**
-     * No disponemos de unidades suficientes
+     * Not enough available crystal units to dispatch
      */
     @Test
     public void dispatchTestNoStock() {
@@ -47,7 +52,7 @@ public class CrystalDispenserTest {
     }
 
     /**
-     * No disponemos de unidades suficientes
+     * Not enough available crystal units to confirm
      */
     @Test
     public void notConfirmTest() {

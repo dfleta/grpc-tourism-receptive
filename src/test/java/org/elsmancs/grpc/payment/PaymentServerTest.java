@@ -1,3 +1,8 @@
+/**
+ * Server Payment logic testing.
+ * Integration with service card pool 
+ * business logic and data repo.
+ */
 
 package org.elsmancs.grpc.payment;
 
@@ -73,9 +78,7 @@ public class PaymentServerTest {
     /**
      * To test the server, make calls with a real stub using the in-process channel,
      * and verify behaviors or state changes from the client side.
-     */
-
-    /**
+     * 
      * Procesa el cargo pues existe credito suficiente
      */
     @Test

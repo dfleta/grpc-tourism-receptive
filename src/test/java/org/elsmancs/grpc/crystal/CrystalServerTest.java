@@ -1,3 +1,10 @@
+
+/**
+ * Server Crystal logic testing.
+ * Integration with service Crystal Dispenser 
+ * business logic and data repo.
+ */
+
 package org.elsmancs.grpc.crystal;
 
 import static org.junit.Assert.assertEquals;
@@ -63,6 +70,9 @@ public class CrystalServerTest {
         server.stop();
     }
 
+    /**
+     * Service Dispatch responses units of crystal available.
+     */
     @Test
     public void crystal_service_dispatch_responseMessage_crystal_avaliable() {
 
@@ -77,6 +87,9 @@ public class CrystalServerTest {
         assertEquals(1, response.getUnidades(), 0);
     }
 
+    /**
+     * Service Confirm dispenses crystal.
+     */
     @Test
     public void crystal_service_confirm_responseMessage_OK() {
 
@@ -90,7 +103,9 @@ public class CrystalServerTest {
         assertTrue(response.getIsProcessed());
     }
 
-
+    /**
+     * Service Confirm can't find enough units of crystal.
+     */
     @Test
     public void crystal_service_confirm_crystal_responseMessage_NotOK() {
 

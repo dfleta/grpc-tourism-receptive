@@ -1,3 +1,8 @@
+/**
+ * Service Payment
+ * business logic and data repo testing
+ */
+
 package org.elsmancs.grpc.payment;
 
 import org.junit.Test;
