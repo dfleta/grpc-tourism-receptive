@@ -11,8 +11,6 @@ public class CrystalDispatcher implements GuestDispatcher {
 
     private static final Logger logger = Logger.getLogger(CrystalDispatcher.class.getName());
 
-    public CrystalDispatcher() {}
-
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws Exception {
                
@@ -24,7 +22,7 @@ public class CrystalDispatcher implements GuestDispatcher {
         // Call the gRPC Pay to pay for the crystal
         if (crystal != null  && PaymentClient.execute(cardOwner, cardNumber, crystal.getFee())) {
             // Call the gRPC to confirm crystal units
-            System.out.println(crystalClient.Confirm(crystal.getUnidades()));
+            logger.info("Crystal confirmed: " + crystalClient.Confirm(crystal.getUnidades()));
         } else {
             logger.info("No available crytal or no credit");
         }

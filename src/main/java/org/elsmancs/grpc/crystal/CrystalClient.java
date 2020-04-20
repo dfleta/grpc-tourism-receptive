@@ -91,7 +91,11 @@ public class CrystalClient {
     }
 
     /**
-     * Setup the client
+     * Setup the client.
+     * Static factory. Not recommended, 
+     * but assuming that to encapsulate the target and 
+     * channel configuration code is a compelling reason.
+     * Item 17: Minimize mutability, Effective Java, Joshua Bloch.
      */
     static CrystalClient init() {
         

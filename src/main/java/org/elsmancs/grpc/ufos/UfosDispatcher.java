@@ -11,8 +11,6 @@ public class UfosDispatcher implements GuestDispatcher {
 
     private static final Logger logger = Logger.getLogger(UfosDispatcher.class.getName());
 
-    public UfosDispatcher() {}
-
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws Exception {
         
@@ -28,7 +26,7 @@ public class UfosDispatcher implements GuestDispatcher {
         // Llamada al gRPC Pay para pagar la reserva
         if (ufo != null  && PaymentClient.execute(cardOwner, cardNumber, ufo.getFee())) {
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
-            System.out.println(ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
+            logger.info("Ufo confirmed: " + ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
         } else {
             logger.info("No UFO available or no credit");
         }
