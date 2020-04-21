@@ -71,7 +71,7 @@ public class PaymentClient {
      * Payment Client setup
      * and call to Pay gRPC
      */
-    public static boolean execute(String cardOwner, String cardNumber, double charge) throws Exception {
+    public static boolean execute(String cardOwner, String cardNumber, double charge) throws InterruptedException {
         
         String target = "localhost:50061";
 

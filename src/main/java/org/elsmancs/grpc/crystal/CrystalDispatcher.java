@@ -12,7 +12,7 @@ public class CrystalDispatcher implements GuestDispatcher {
     private static final Logger logger = Logger.getLogger(CrystalDispatcher.class.getName());
 
     @Override
-    public void dispatch(String cardOwner, String cardNumber) throws Exception {
+    public void dispatch(String cardOwner, String cardNumber) throws InterruptedException {
                
         // Open channel with the server
         CrystalClient crystalClient = CrystalClient.init();

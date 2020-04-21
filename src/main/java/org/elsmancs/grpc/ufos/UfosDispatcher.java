@@ -12,7 +12,7 @@ public class UfosDispatcher implements GuestDispatcher {
     private static final Logger logger = Logger.getLogger(UfosDispatcher.class.getName());
 
     @Override
-    public void dispatch(String cardOwner, String cardNumber) throws Exception {
+    public void dispatch(String cardOwner, String cardNumber) throws InterruptedException {
         
         // Abrimos canal de comunicacion con el server
         // Los canales son thread-safe and reusable. 

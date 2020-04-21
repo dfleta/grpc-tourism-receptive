@@ -116,7 +116,7 @@ public class CrystalClient {
         this.channel = channel;
     }
 
-    void shutDownChannel() throws Exception {
+    void shutDownChannel() throws InterruptedException {
         channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         logger.info("ManagedChannel CrystalClient closed");
     }

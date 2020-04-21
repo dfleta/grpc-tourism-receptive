@@ -118,7 +118,7 @@ public class UfosParkClient {
     }    
 
 
-    void shutDownChannel() throws Exception {
+    void shutDownChannel() throws InterruptedException {
         // ManagedChannels usan recursos como threads y conexiones TCP. 
         // Es necesario cerrarlos cuando no vayan a ser usados.
         // Si va a ser usado de nuevo puede dejarse corriendo.
