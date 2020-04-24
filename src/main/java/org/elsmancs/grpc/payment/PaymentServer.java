@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import org.elsmancs.grpc.Credit;
 import org.elsmancs.grpc.CreditCard;
 import org.elsmancs.grpc.PaymentGrpc;
 import org.elsmancs.grpc.Processed;
@@ -111,5 +112,20 @@ public class PaymentServer {
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();
         }
+
+        @Override
+        public void availableCredit(CreditCard request, StreamObserver<org.elsmancs.grpc.Credit> responseCredit) {
+
+            double credit = cardsPool.credit(request);
+
+            // Message Credit (available)
+            Credit reply = Credit.newBuilder().setCredit(credit).build();
+
+            responseCredit.onNext(reply);
+            // Specify that we’ve finished dealing with the RPC.
+            responseCredit.onCompleted();
+        }
+
+
     }
 }

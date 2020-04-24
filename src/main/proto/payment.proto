@@ -21,6 +21,7 @@ service Payment {
     // Returns boolean if card is charged.
  
     rpc Pay (CreditCard) returns (Processed) {}
+    rpc AvailableCredit(CreditCard) returns (Credit) {}
 }
    
 // Message: credit card
@@ -37,5 +38,9 @@ message CreditCard {
 message Processed {  
     // Charge processed or not
     bool isProcessed = 1;
+}
+
+message Credit {
+    double credit = 1;
 }
  

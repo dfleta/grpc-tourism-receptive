@@ -5,6 +5,7 @@
 
 package org.elsmancs.grpc.payment;
 
+import org.elsmancs.grpc.Credit;
 import org.elsmancs.grpc.CreditCard;
 import org.elsmancs.grpc.PaymentGrpc;
 import org.elsmancs.grpc.Processed;
@@ -25,6 +26,12 @@ public class PaymentClient {
     private static final Logger logger = Logger.getLogger(PaymentClient.class.getName());
 
     private final PaymentGrpc.PaymentBlockingStub blockingStub;
+
+    // Access a service running on the local machine on port 50061
+    private static String target = "localhost:50061";
+
+    // SRP + OCP
+    private ManagedChannel channel = null;
 
     /**
      * Construct client for accessing PaymentServer using the existing channel.
@@ -68,12 +75,58 @@ public class PaymentClient {
     }
 
     /**
+     * Get credit of a credit card.
+     * Only for testing purpouses.
+     */
+    public double availableCredit(String owner, String cardNumber) {
+
+        logger.info("Getting " + cardNumber + " credit" + " ...");
+
+        CreditCard request = CreditCard.newBuilder()
+                             .setOwner(owner)
+                             .setNumber(cardNumber)                            
+                             .build();
+
+        Credit response;
+        try {
+            response = blockingStub.availableCredit(request);
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return 0;
+        }
+        logger.info(request.getNumber() + " credit: " + response.getCredit());
+        return response.getCredit();
+    }
+
+    /**
+     * Setup the client.
+     * Static factory. Not recommended, 
+     * but assuming that to encapsulate the target and 
+     * channel configuration code is a compelling reason.
+     * Item 17: Minimize mutability, Effective Java, Joshua Bloch.
+     */
+    public static PaymentClient init() {
+            
+        ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
+                // Channels are secure by default (via SSL/TLS). 
+                // For the example we disable TLS to avoid
+                // needing certificates.
+                .usePlaintext().build();
+
+        PaymentClient paymentClient = new PaymentClient(channel);
+        paymentClient.setChannel(channel);
+        return paymentClient;
+    }
+
+    private void setChannel(ManagedChannel channel) {
+        this.channel = channel;
+    }
+
+    /**
      * Payment Client setup
      * and call to Pay gRPC
      */
     public static boolean execute(String cardOwner, String cardNumber, double charge) throws InterruptedException {
-        
-        String target = "localhost:50061";
 
         ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
             .usePlaintext()
@@ -95,7 +148,7 @@ public class PaymentClient {
         String card = "123456789";
         double charge = 500d;
         // Access a service running on the local machine on port 50061
-        String target = "localhost:50061";
+
         // Allow passing in the user and target strings as command line arguments
         if (args.length > 0) {
             if ("--help".equals(args[0])) {

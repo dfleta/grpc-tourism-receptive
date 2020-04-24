@@ -6,9 +6,11 @@
 
 package org.elsmancs.grpc.payment;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.elsmancs.grpc.Credit;
 import org.elsmancs.grpc.CreditCard;
 import org.elsmancs.grpc.PaymentGrpc;
 import org.elsmancs.grpc.Processed;
@@ -60,7 +62,7 @@ public class PaymentServerTest {
 
         // Create a server, add service, start, and register for automatic graceful
         // shutdown.
-        int port = 50051;
+        int port = 50061;
         server = new PaymentServer(InProcessServerBuilder.forName(serverName).directExecutor(),
                                     port);
 
@@ -86,9 +88,11 @@ public class PaymentServerTest {
 
         PaymentGrpc.PaymentBlockingStub blockingStub = PaymentGrpc.newBlockingStub(inProcessChannel);
 
-
-        Processed reply = blockingStub
-                .pay(CreditCard.newBuilder().setOwner("Rick").setNumber("1111").setCharge(3000).build());
+        Processed reply = blockingStub.pay(CreditCard.newBuilder()
+                                                        .setOwner("Rick")
+                                                        .setNumber("1111")
+                                                        .setCharge(3000)
+                                                        .build());
 
         assertTrue(reply.getIsProcessed());
     }
@@ -101,7 +105,11 @@ public class PaymentServerTest {
 
         PaymentGrpc.PaymentBlockingStub blockingStub = PaymentGrpc.newBlockingStub(inProcessChannel);
 
-        Processed reply = blockingStub.pay(CreditCard.newBuilder().setOwner("Rick").setNumber("1111").setCharge(4000).build());
+        Processed reply = blockingStub.pay(CreditCard.newBuilder()
+                                                      .setOwner("Rick")
+                                                      .setNumber("1111")
+                                                      .setCharge(4000)
+                                                      .build());
 
         assertFalse(reply.getIsProcessed());
     }
@@ -116,7 +124,11 @@ public class PaymentServerTest {
 
         Processed reply = null;
 
-        CreditCard card = CreditCard.newBuilder().setOwner("Rick").setNumber("1111").setCharge(1000).build();
+        CreditCard card = CreditCard.newBuilder()
+                                    .setOwner("Rick")
+                                    .setNumber("1111")
+                                    .setCharge(1000)
+                                    .build();
 
         for (int i=0; i<=2; i++) {
             reply = blockingStub.pay(card);
@@ -125,5 +137,31 @@ public class PaymentServerTest {
         
         reply = blockingStub.pay(card);
         assertFalse(reply.getIsProcessed());        
+    }
+
+    /**
+     * Testing Available Credit service
+     * used as a utility for integration testing
+     * of dispatcher components.
+     */
+    @Test
+    public void AvaliableCreditService_replyMessage() throws Exception {
+
+        PaymentGrpc.PaymentBlockingStub blockingStub = PaymentGrpc.newBlockingStub(inProcessChannel);
+
+        // Charges the card first
+        CreditCard card = CreditCard.newBuilder()
+                                        .setOwner("Rick")
+                                        .setNumber("1111")
+                                        .setCharge(3000)
+                                        .build();
+
+        Processed isProcessed = blockingStub.pay(card);
+        assertTrue(isProcessed.getIsProcessed());
+
+        // Then check no credit available
+        Credit reply = blockingStub.availableCredit(card);
+
+        assertEquals(0d, reply.getCredit(), 0.1);
     }
 }
