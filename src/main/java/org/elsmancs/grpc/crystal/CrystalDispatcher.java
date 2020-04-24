@@ -14,13 +14,16 @@ public class CrystalDispatcher implements GuestDispatcher {
     @Override
     public void dispatch(String cardOwner, String cardNumber) throws InterruptedException {
                
-        // Open channel with the server
+        // Open channel with crystal server
         CrystalClient crystalClient = CrystalClient.init();
         // Call the gRPC Dispatch to order Crystal
         Crystal crystal = crystalClient.Dispatch(cardOwner, cardNumber);
 
+        //Open channel with payment server
+        PaymentClient paymentClient = PaymentClient.init();
+
         // Call the gRPC Pay to pay for the crystal
-        if (crystal != null  && PaymentClient.execute(cardOwner, cardNumber, crystal.getFee())) {
+        if (crystal != null  && paymentClient.Pay(cardOwner, cardNumber, crystal.getFee())) {
             // Call the gRPC to confirm crystal units
             logger.info("Crystal confirmed: " + crystalClient.Confirm(crystal.getUnidades()));
         } else {
