@@ -23,8 +23,11 @@ public class UfosDispatcher implements GuestDispatcher {
         // Llamada al gRPC Dispatch Card para reservar un UFO
         Ufo ufo = ufosClient.Dispatch(cardOwner, cardNumber);
 
+        //Open channel with payment server
+        PaymentClient paymentClient = PaymentClient.init();
+
         // Llamada al gRPC Pay para pagar la reserva
-        if (ufo != null  && PaymentClient.execute(cardOwner, cardNumber, ufo.getFee())) {
+        if (ufo != null  && paymentClient.Pay(cardOwner, cardNumber, ufo.getFee())) {
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
             logger.info("Ufo confirmed: " + ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
         } else {
