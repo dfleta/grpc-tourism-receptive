@@ -33,5 +33,6 @@ public class CrystalDispatcher implements GuestDispatcher {
         // The channel is reused between server calls.
         // Close it when the app finish.
         crystalClient.shutDownChannel();
+        paymentClient.shutDownChannel();
     }
 }

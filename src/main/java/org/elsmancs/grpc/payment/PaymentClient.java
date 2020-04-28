@@ -76,7 +76,7 @@ public class PaymentClient {
 
     /**
      * Get credit of a credit card.
-     * Only for testing purpouses.
+     * Only for testing purpose.
      */
     public double availableCredit(String owner, String cardNumber) {
 
@@ -120,6 +120,14 @@ public class PaymentClient {
 
     private void setChannel(ManagedChannel channel) {
         this.channel = channel;
+    }
+
+    public void shutDownChannel() throws InterruptedException {
+        // ManagedChannels usan recursos como threads y conexiones TCP. 
+        // Es necesario cerrarlos cuando no vayan a ser usados.
+        // Si va a ser usado de nuevo puede dejarse corriendo.
+        channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        logger.info("ManagedChannel PaymentClient closed");
     }
 
     /**

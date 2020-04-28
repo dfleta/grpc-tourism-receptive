@@ -21,6 +21,7 @@ service Payment {
     // Returns boolean if card is charged.
  
     rpc Pay (CreditCard) returns (Processed) {}
+    // For integration testing purpose
     rpc AvailableCredit(CreditCard) returns (Credit) {}
 }
    

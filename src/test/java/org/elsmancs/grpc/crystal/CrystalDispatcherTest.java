@@ -39,6 +39,7 @@ public class CrystalDispatcherTest {
 
         PaymentClient paymentClient = PaymentClient.init();
         double credit = paymentClient.availableCredit("Rick", "111111111111");
-        assertEquals(2950, credit, 0.1);        
+        assertEquals(2950, credit, 0.1);
+        paymentClient.shutDownChannel();
     }
 }
