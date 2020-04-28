@@ -28,8 +28,9 @@ public class UfosDispatcher implements GuestDispatcher {
 
         // Llamada al gRPC Pay para pagar la reserva
         if (ufo != null  && paymentClient.Pay(cardOwner, cardNumber, ufo.getFee())) {
+            boolean isUfoAssigned = ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber());
             // Llamada al gRPC para confirmar ese UFO a esa tarjeta
-            logger.info("Ufo confirmed: " + ufosClient.AssignUfo(ufo.getId(), ufo.getCardNumber()));
+            logger.info("Ufo confirmed: " + isUfoAssigned);
         } else {
             logger.info("No UFO available or no credit");
         }
@@ -37,5 +38,6 @@ public class UfosDispatcher implements GuestDispatcher {
         // El canal se reutiliza entre llamadas al server
         // Cerrarlo al terminar
         ufosClient.shutDownChannel();
+        paymentClient.shutDownChannel();
     }
 }

@@ -32,7 +32,9 @@ service UfosPark {
     // Processed message imported from payment.proto
 
     rpc Dispatch (payment.CreditCard) returns (Ufo) {}
-    rpc AssignUfo (Ufo) returns (payment.Processed) {}  
+    rpc AssignUfo (Ufo) returns (payment.Processed) {}
+    // For integration testing purpose
+    rpc UfoOf (payment.CreditCard) returns (Ufo) {}
 }
 
 // Message: Ufo booked by the credit card

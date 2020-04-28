@@ -178,4 +178,39 @@ public class UfosParkClientTest {
         assertEquals(requestUfo, ufoDelivered.get());
         assertFalse(processedDelivered);
     }
+
+    @Test
+    public void UfoOf_test() {
+
+        // Mensaje CreditCard al servicio
+        CreditCard card = CreditCard.newBuilder()
+                                        .setOwner("Rick")
+                                        .setNumber("111111111111")
+                                        .build();
+
+        AtomicReference<CreditCard> cardDelivered = new AtomicReference<CreditCard>();
+
+        // Mock de la respuesta /mensaje Processed del servicio
+        Ufo responseUfo = Ufo.newBuilder().setId("unox").setCardNumber("111111111111").setFee(500).build();
+
+        // Fake service
+        UfosParkImplBase assignImpl = new UfosParkImplBase() {
+            @Override
+            public void ufoOf(CreditCard request, StreamObserver<org.elsmancs.grpc.Ufo> response) {
+                // para chequear que la construccion del Ufo en el client se realiza OK
+                cardDelivered.set(request);
+                // return the Ufo
+                response.onNext(responseUfo);
+                // Specify that we’ve finished dealing with the RPC.
+                response.onCompleted();
+            }
+        };
+
+        serviceRegistry.addService(assignImpl);
+
+        String ufoID = client.UfoOf("Rick", "111111111111");
+
+        assertEquals(card, cardDelivered.get());
+        assertEquals(responseUfo.getId(), ufoID);
+    }    
 }

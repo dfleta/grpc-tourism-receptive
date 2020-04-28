@@ -121,5 +121,17 @@ public class UfosParkServer {
             // Specify that we’ve finished dealing with the RPC.
             responseObserver.onCompleted();
         }
+
+        @Override
+        public void ufoOf(CreditCard request, StreamObserver<org.elsmancs.grpc.Ufo> responseObserver) {
+            
+            String ufoID = ufosPark.getUfoOf(request.getNumber());
+
+            Ufo reply = Ufo.newBuilder().setId(ufoID).setCardNumber(request.getNumber()).build();
+            // return the Ufo message
+            responseObserver.onNext(reply);
+            // Specify that we’ve finished dealing with the RPC.
+            responseObserver.onCompleted();
+        }
     }
 }

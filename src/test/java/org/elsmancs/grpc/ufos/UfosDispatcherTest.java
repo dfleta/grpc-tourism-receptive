@@ -1,6 +1,7 @@
 package org.elsmancs.grpc.ufos;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.elsmancs.grpc.payment.PaymentClient;
 import org.elsmancs.grpc.payment.PaymentServer;
@@ -10,14 +11,14 @@ import org.junit.Test;
 
 public class UfosDispatcherTest {
 
-    private UfosParkServer serverUfo = null;
+    private UfosParkServer serverUfos = null;
     private PaymentServer serverPayment = null;
 
     @Before
     public void setup() throws Exception {
-
-        serverUfo = new UfosParkServer();
-        serverUfo.start();
+        
+        serverUfos = new UfosParkServer();
+        serverUfos.start();
 
         serverPayment = new PaymentServer();
         serverPayment.start();
@@ -25,7 +26,7 @@ public class UfosDispatcherTest {
 
     @After
     public void tearDown() throws Exception {
-        serverUfo.stop();
+        serverUfos.stop();
         serverPayment.stop();
     }
 
@@ -37,7 +38,12 @@ public class UfosDispatcherTest {
 
         PaymentClient paymentClient = PaymentClient.init();
         double credit = paymentClient.availableCredit("Rick", "111111111111");
-        assertEquals(500, credit, 0.1);        
-    }
+        assertEquals(500, credit, 0.1);
+        paymentClient.shutDownChannel();
 
+        UfosParkClient ufosClient = UfosParkClient.init();
+        String ufoID = ufosClient.UfoOf("Rick", "111111111111");
+        assertNotEquals("no UFO", ufoID);
+        ufosClient.shutDownChannel();
+    }
 }

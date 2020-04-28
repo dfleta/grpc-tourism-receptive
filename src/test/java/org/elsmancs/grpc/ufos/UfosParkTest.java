@@ -41,9 +41,25 @@ public class UfosParkTest {
 
     @Test
     public void assignUfoTest() {
+
         ufos.assignUfo("unx", "1111111111111");
         assertTrue(ufos.containsCard("1111111111111"));
         assertEquals("unx", ufos.getUfoOf("1111111111111"));
+        List<String> cards = ufos.cardNumbers()
+                                    .stream()
+                                    .collect(Collectors.toList());
+        assertEquals(ovnis.length, cards.size(), 1);
+    }
+
+    @Test
+    public void not_assignUfoTest() {
+        ufos.assignUfo("otrox", "1111111111111");
+        assertFalse(ufos.containsCard("1111111111111"));
+        assertEquals("no UFO", ufos.getUfoOf("1111111111111"));
+        List<String> cards = ufos.cardNumbers()
+                                    .stream()
+                                    .collect(Collectors.toList());
+        assertEquals(ovnis.length, cards.size(), 0);
     }
 
     @Test
@@ -52,9 +68,9 @@ public class UfosParkTest {
         ufos.assignUfo("unx", "1111111111111");
         assertTrue(ufos.containsCard("1111111111111"));
         assertEquals("unx", ufos.getUfoOf("1111111111111"));
-        assertFalse(ufos.containsCard("222222222222"));
-        assertNull(ufos.getUfoOf("222222222222"));
 
+        assertFalse(ufos.containsCard("222222222222"));
+        assertEquals("no UFO", ufos.getUfoOf("222222222222"));
     }
 
     @Test

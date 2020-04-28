@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.google.common.annotations.VisibleForTesting;
 
@@ -63,12 +64,14 @@ class UfosPark {
     }
 
     String getUfoOf(String cardNumber) {
-        String ufoID = null;
+        String ufoID = "no UFO";
+        Optional<String> card;
         if (this.fleet.containsValue(cardNumber)) {
             for (Map.Entry<String, String> entry: this.fleet.entrySet()) {
-                if (entry.getValue() == cardNumber) {
+                card = Optional.ofNullable(entry.getValue());
+                if (card.isPresent() && card.get().equals(cardNumber)) {
                     ufoID = entry.getKey();
-                    break;
+                    return ufoID;
                 }
             }
         }

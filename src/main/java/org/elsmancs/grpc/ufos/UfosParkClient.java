@@ -92,6 +92,29 @@ public class UfosParkClient {
     }
 
     /**
+     * Get Ufo booked by a credit card.
+     * Only for testing purpose.
+     */
+    public String UfoOf(String owner, String cardNumber) {
+
+        logger.info("Getting UFO of " + owner + " " + cardNumber +  " ...");
+
+        CreditCard request = CreditCard.newBuilder()
+                                        .setOwner(owner)
+                                        .setNumber(cardNumber)
+                                        .build();
+        Ufo response;
+        try {
+            response = blockingStub.ufoOf(request);
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return null;
+        }
+        logger.info("Ufo booked by " + response.getCardNumber() + ": " + response.getId());
+        return response.getId();
+    }
+
+    /**
      * Setup the client.
      * Static factory. Not recommended, 
      * but assuming that to encapsulate the target and 

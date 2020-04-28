@@ -54,7 +54,7 @@ public class UfosParkServerTest {
 
         // Create a server, add service, start, and register for automatic graceful
         // shutdown.
-        int port = 50061;
+        int port = 50051;
         server = new UfosParkServer(InProcessServerBuilder.forName(serverName).directExecutor(),
                                     port);
 
@@ -88,7 +88,7 @@ public class UfosParkServerTest {
                                         .setNumber("111111111111")
                                         .build();
 
-        org.elsmancs.grpc.Ufo response = blockingStub.dispatch(request);
+        Ufo response = blockingStub.dispatch(request);
 
         assertEquals("111111111111", response.getCardNumber());
         assertNotEquals("no ufo reserved", response.getId());        
@@ -96,7 +96,7 @@ public class UfosParkServerTest {
 
     /**
      * Asigna el UFO indicado a la tarjeta indicada
-     * siempre que la ID del UFo exista en la BBDD
+     * siempre que la ID del UFO exista en la BBDD
      */
     @Test
     public void ufosParkService_assignUfo_responseMessage_isProcessed() {
@@ -182,4 +182,37 @@ public class UfosParkServerTest {
         assertEquals("no ufo reserved", response.getId());
     }
 
+    /**
+     * Obtener el UFO asignado a la tarjeta indicada
+     */
+    @Test
+    public void ufosParkService_ufoOf_responseMessage_OK() {
+
+        UfosParkGrpc.UfosParkBlockingStub blockingStub = UfosParkGrpc.newBlockingStub(inProcessChannel);
+
+        CreditCard card = CreditCard.newBuilder()
+                                    .setOwner("Rick")
+                                    .setNumber("111111111111")
+                                    .build();
+        // Ufo available inquiry
+        Ufo ufoReserved = blockingStub.dispatch(card);
+        assertEquals(ufoReserved.getCardNumber(), card.getNumber());
+
+        // Assign Ufo to credit card
+        Processed isAssigned = blockingStub.assignUfo(ufoReserved);
+        assertTrue(isAssigned.getIsProcessed());
+
+        // Ufo confirmed is equal to ufo assigned
+        Ufo ufo = blockingStub.ufoOf(card);
+        assertEquals(ufoReserved.getId(), ufo.getId());
+
+        // no Ufo booked
+        card = CreditCard.newBuilder()
+                            .setOwner("Morty")
+                            .setNumber("222222222222")
+                            .build();
+        
+        ufo = blockingStub.ufoOf(card);
+        assertEquals("no UFO", ufo.getId());
+    }
 }
