@@ -65,7 +65,7 @@ public class UfosParkServer {
         });
     }
 
-    void stop() throws InterruptedException {
+    public void stop() throws InterruptedException {
         if (server != null) {
             server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }

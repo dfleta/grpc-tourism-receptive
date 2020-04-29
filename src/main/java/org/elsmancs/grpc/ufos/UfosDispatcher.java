@@ -40,4 +40,9 @@ public class UfosDispatcher implements GuestDispatcher {
         ufosClient.shutDownChannel();
         paymentClient.shutDownChannel();
     }
+
+    @Override
+    public String toString() {
+        return UfosDispatcher.class.getSimpleName();
+    }
 }

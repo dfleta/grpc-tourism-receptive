@@ -6,11 +6,11 @@
  * A guest is dispatched by charging its credit card
  * with each observer business service cost.
  */
-
 package org.elsmancs.grpc;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class Receptive {
     
@@ -26,5 +26,14 @@ class Receptive {
         for (GuestDispatcher observer: observers) {
                 observer.dispatch(cardOwner, cardNumber);       
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.observers.stream()
+                                .map(GuestDispatcher::toString)
+                                .sorted()
+                                .collect(Collectors.toList())
+                                .toString();
     }
 }

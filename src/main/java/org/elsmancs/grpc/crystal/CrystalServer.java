@@ -42,7 +42,7 @@ public class CrystalServer {
 
     }
 
-    void start() throws IOException {
+    public void start() throws IOException {
 
         this.server.start();
 
@@ -64,7 +64,7 @@ public class CrystalServer {
         });
     }
 
-    void stop() throws InterruptedException {
+    public void stop() throws InterruptedException {
         if (server != null) {
             server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }

@@ -35,4 +35,9 @@ public class CrystalDispatcher implements GuestDispatcher {
         crystalClient.shutDownChannel();
         paymentClient.shutDownChannel();
     }
+
+    @Override
+    public String toString() {
+        return CrystalDispatcher.class.getSimpleName();
+    }
 }
