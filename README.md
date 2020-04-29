@@ -5,7 +5,7 @@ A "tourism" receptive system based on **gRPC** (Google remote procedure call fra
 
 Structured data can be serialized by using **protocol buffers**. gRPC exchanges those data between multiple services in different environments, in a **microservices** type architecture.
 
-A project for personal learning and then teaching my students. Some test code from gRPC boilerplate - [gRPC Java Basics](https://grpc.io/docs/tutorials/basic/java/ "gRPC Java Basics") and [grpc Examples](https://github.com/grpc/grpc-java/blob/master/examples/README.md "gRPC examples on github") , testing clients and servers- has been included.
+A project for personal learning and then teaching my students. Some test code from gRPC boilerplate - [gRPC Java Basics](https://grpc.io/docs/tutorials/basic/java/ "gRPC Java Basics") and [grpc Examples](https://github.com/grpc/grpc-java/blob/master/examples/README.md "gRPC examples on github"), testing clients and servers- has been included.
 
 ## User Stories
 
