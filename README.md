@@ -3,9 +3,9 @@ Ricksy Business - gRPC
 
 A "tourism" receptive system based on **gRPC** (Google remote procedure call framework), implementing the **observer GoF design pattern**, and **test driven development (TDD)**, written in **Java**.
 
-By using **protocol buffers** we serialize structured data. gRPC exchange those data between multiple services in different environments, in a **microservices** style architecture.
+Structured data can be serialized by using **protocol buffers**. gRPC exchanges those data between multiple services in different environments, in a **microservices** style architecture.
 
-A project for personal learning and then teaching my students. Some test code from gRPC boilerplate - [gRPC Java Basics](https://grpc.io/docs/tutorials/basic/java/ "gRPC Java Basics") and [grpc Examples](https://github.com/grpc/grpc-java/blob/master/examples/README.md "gRPC examples on github") , testing clients and servers- has been included in the `test.org.elsmancs.grpc` package.
+A project for personal learning and then teaching my students. Some test code from gRPC boilerplate - [gRPC Java Basics](https://grpc.io/docs/tutorials/basic/java/ "gRPC Java Basics") and [grpc Examples](https://github.com/grpc/grpc-java/blob/master/examples/README.md "gRPC examples on github") , testing clients and servers- has been included.
 
 ## User Stories
 
@@ -20,20 +20,24 @@ When a guest enters the party he /she is processed in the receptive "tourist" sy
 
 ## Architecture
 
-Rick is such a huge fan of the **GoF design patterns** book that he designs the system architecture in accordance with the **observer pattern**. Both, the UFO reservation component and the kalaxian crystal dispenser component, observe the receptive component. Therefore, when a guest is processed by the receptive it charges automatically the guest credit card with the cost of both services. Of course, the system design is conformed with the **SOLID Open Closed Principle** (also respects **Dependency Inversion** Principle), so it is not necessary to modify the existing code to add and enable a new service component.  
+Rick is such a huge fan of the **GoF design patterns** book that he designs the system architecture in accordance with the **observer pattern**. 
+
+Both, the UFO reservation component and the kalaxian crystal dispenser component, observe the receptive component. Therefore, when a guest is processed by the receptive it charges automatically the guest credit card with the cost of both services. Of course, the system design is conformed with the **SOLID Open Closed Principle** (also respects **Dependency Inversion** Principle), so it is not necessary to modify the existing code to add and enable a new service component.  
 
 As Rick find himself bored till the party starts, he decides to learn about **gRPC** - a _"modern open source high performance RPC framework by Google"_- and develops all the three components (UFOs park, crystal dispenser and payment services) running in separate **microservices** exchanging structured data in the form of **protocol buffers**.
 
 ## Testing
 
-Rick has written the code with tons of fury and caffeine but, quoting himself _"I programmed you to believe that"_, is the **TDD** that saves the day. **Test Driven Development**, paying the **technical debt** every day, is a matter of _wubba lubba dub dub_ concern to him. 
-**Mockito** and **harmcrest** worth it. 
+Rick has written the code with tons of fury and caffeine but, quoting himself _"I programmed you to believe that"_, is the **Test Driven Development (TDD)** that saves the day. Paying the **technical debt** in a regular basis, is a matter of _wubba lubba dub dub_ concern to him.
+
+**Mockito** and **harmcrest** worth it.
+
 **Conventional commits** are preferred too.
 
 
 ## Installation
 
-Clone the repo and move to the main folder:
+Clone this repo and move to the main folder:
 
 ```bash
 $ cd ricksy-business-gRPC
@@ -66,7 +70,7 @@ $ ./build/install/grpc-ricksy-business/bin/ufos-park-server
 Morty is joining the party (not without regret):
 
 ``` bash
-$ ./build/install/grpc-ricksy-business/bin/app Morty 111111111111
+$ ./build/install/grpc-ricksy-business/bin/app Morty 1111111111111111
 ```
 
 Also, Rick friends are welcome too:
