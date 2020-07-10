@@ -22,9 +22,15 @@ When a guest enters the party he /she is processed in the receptive "tourist" sy
 
 Rick is such a huge fan of the **GoF design patterns** book that he designs the system architecture in accordance with the **observer pattern**. 
 
-Both, the UFO reservation component and the kalaxian crystal dispenser component, observe the receptive component. Therefore, when a guest is processed by the receptive it charges automatically the guest credit card with the cost of both services. Of course, the system design is conformed with the **SOLID Open Closed Principle** (also respects **Dependency Inversion** Principle), so it is not necessary to modify the existing code to add and enable a new service component.  
+Both, the UFO reservation component and the kalaxian crystal dispenser component, observe the receptive component. Therefore, when a guest is processed by the receptive it charges automatically the guest credit card with the cost of both services. Of course, the system design is conformed with the **SOLID Open Closed Principle** (also respects **Dependency Inversion** Principle), so it is not necessary to modify the existing code to add and enable a new service component.
+
+The figure shows the resulting UML class diagram:
+![UML class diagram](./diagrama_clases_%20UML_.png)
 
 As Rick find himself bored till the party starts, he decides to learn about **gRPC** - a _"modern open source high performance RPC framework by Google"_- and develops all the three components (UFOs park, crystal dispenser and payment services) running in separate **microservices** exchanging structured data in the form of **protocol buffers**.
+
+The resulting "arquitecture" is this:
+![UML class diagram RPC](./diagrama_clases_microservicios.jpg)
 
 ## Testing
 
