@@ -29,7 +29,7 @@ The figure shows the resulting UML class diagram:
 
 As Rick find himself bored till the party starts, he decides to learn about **gRPC** - a _"modern open source high performance RPC framework by Google"_- and develops all the three components (UFOs park, crystal dispenser and payment services) running in separate **microservices** exchanging structured data in the form of **protocol buffers**.
 
-The resulting "arquitecture" is this:
+The resulting "architecture" is this:
 ![UML class diagram RPC](./diagrama_clases_microservicios.jpg)
 
 ## Testing
